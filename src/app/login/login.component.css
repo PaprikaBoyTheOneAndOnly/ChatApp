@@ -1,0 +1,18 @@
+.head {
+  margin-top: 10%;
+}
+
+.form-control {
+  margin-bottom: 10px!important;
+}
+
+.container {
+  width: 400px;
+  box-shadow: rgba(0,0,0,0.3) 10px 10px;
+  background-color: #ededa6;
+}
+
+.btn{
+  margin:2%;
+  width: 46%;
+}

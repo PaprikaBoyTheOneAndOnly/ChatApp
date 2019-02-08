@@ -1,0 +1,19 @@
+import {HttpClient} from "@angular/common/http";
+import {Injectable} from "@angular/core";
+import {Observable, of} from "rxjs";
+
+export interface message {
+  index:number;
+  message:string;
+}
+
+@Injectable()
+export class  AppService {
+
+  constructor(private http: HttpClient){
+  }
+
+  getMessage(): Observable<string>{
+    return this.http.get<string>("http://localhost:8080/ChatAppService_war/hello");
+  }
+}

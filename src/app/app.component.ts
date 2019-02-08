@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {AppService} from "./app.service";
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'ChatApp';
+  message = 'Hello from Angular';
+
+  constructor(private service: AppService) {
+  }
+
+  loadMessage() {
+    this.service.getMessage().subscribe(message => {
+      console.log(message)
+      this.message = message;
+    });
+  }
 }
