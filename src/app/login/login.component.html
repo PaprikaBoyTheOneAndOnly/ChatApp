@@ -3,11 +3,11 @@
     <h1>Welcome to Whatsappn't</h1>
   </div>
 
-  <div class="card-body">
+  <div class="card-body" [formGroup]="loginForm">
     <div class="row">
       <div class="col-md-2"></div>
       <div class="col-md-8">
-        <input type="text" class="form-control" placeholder="Username" >
+        <input type="text" class="form-control" placeholder="Username" formControlName="username">
       </div>
       <div class="col-md-2"></div>
     </div>
@@ -15,7 +15,7 @@
     <div class="row">
       <div class="col-md-2"></div>
       <div class="col-md-8">
-        <input type="Password" class="form-control" placeholder="Password">
+        <input type="Password" class="form-control" placeholder="Password" formControlName="password">
       </div>
       <div class="col-md-2"></div>
     </div>
@@ -23,12 +23,15 @@
     <div class="row">
       <div class="col-md-2"></div>
       <div class="col-md-8">
-        <button class="btn btn-primary">Login</button>
+        <button class="btn btn-primary" (click)="login()">Login</button>
         <button class="btn btn-primary">Sign Up</button>
       </div>
       <div class="col-md-2"></div>
     </div>
 
+    <div *ngIf="error" class="alert alert-danger text-center" role="alert">
+      {{error}}
+    </div>
   </div>
 </div>
 
