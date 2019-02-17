@@ -25,7 +25,7 @@ export class AppService {
 
   validateInput(username: string, password: string):any {
     return this.http.post<any>("http://localhost:8080/ChatAppService_war/validateAccount",
-      JSON.stringify({username, password}), {
+      JSON.stringify({username, password, logedIn:true}), {
         headers: {'Content-Type': 'application/json; charset=utf-8'}
       }
     );

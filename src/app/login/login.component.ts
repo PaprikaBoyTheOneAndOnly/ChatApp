@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {FormBuilder, FormControl} from "@angular/forms";
 import {AppService} from "../app.service";
 
 @Component({
@@ -30,9 +30,10 @@ export class LoginComponent implements OnInit {
       this.error = '';
       this.service.validateInput(username, password).subscribe(
         response => {
-          if (response)
+          if (response) {
             localStorage.setItem('Account', JSON.stringify(response));
-          else
+            window.location.assign("user")
+          } else
             this.error = "Please enter a valid username/password";
         },
         error => {
