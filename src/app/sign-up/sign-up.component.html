@@ -1,0 +1,61 @@
+<div class="container card head">
+  <div class="text-center head">
+    <h1>Sign-Up to Whatsappn't</h1>
+  </div>
+
+  <div class="card-body" [formGroup]="signUpForm">
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-8">
+        <p>Username: </p>
+        <input type="text" class="form-control" formControlName="username" required>
+      </div>
+      <div class="col-md-2"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-8">
+        <p>Password: </p>
+        <input type="Password" class="form-control" formControlName="password" required>
+      </div>
+      <div class="col-md-2"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-8">
+        <p>Rewrite password: </p>
+        <input type="Password" class="form-control" formControlName="rePassword" required>
+      </div>
+      <div class="col-md-2"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-8">
+        <button class="btn btn-primary" (click)="save()">Save</button>
+      </div>
+      <div class="col-md-2"></div>
+    </div>
+
+    <div *ngIf="username.invalid && (username.dirty || username.touched)"
+         class="alert alert-danger">
+
+      <div *ngIf="username.errors.required">
+        Name is required.
+      </div>
+      <div *ngIf="username.errors.minlength">
+        Name must be at least 4 characters long.
+      </div>
+
+    </div>
+
+    <div *ngIf="error" class="alert alert-danger text-center" role="alert">
+      {{error}}
+    </div>
+  </div>
+</div>
+
+
+

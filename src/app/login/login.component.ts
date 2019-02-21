@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl} from "@angular/forms";
-import {AppService} from "../app.service";
+import {FormBuilder, FormControl} from '@angular/forms';
+import {AppService} from '../app.service';
 
 @Component({
   selector: 'app-login',
@@ -23,8 +23,8 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    let username = this.loginForm.controls.username.value;
-    let password = this.loginForm.controls.password.value;
+    const username = this.loginForm.controls.username.value;
+    const password = this.loginForm.controls.password.value;
 
     if (username && password) {
       this.error = '';
@@ -32,14 +32,15 @@ export class LoginComponent implements OnInit {
         response => {
           if (response) {
             localStorage.setItem('Account', JSON.stringify(response));
-            window.location.assign("user")
-          } else
-            this.error = "Please enter a valid username/password";
+            window.location.assign('user');
+          } else {
+            this.error = 'Please enter a valid username/password';
+          }
         },
         error => {
           console.log(error);
         }
-      )
+      );
     } else {
       this.error = 'Please fill all gaps';
     }
