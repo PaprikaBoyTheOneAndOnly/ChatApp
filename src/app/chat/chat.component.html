@@ -1,3 +1,19 @@
 <div class="container card">
-  <p>dasf</p>
+  <div class="row content">
+    <div cdkDropList class="col-md-3 chat-container example-list" (cdkDropListDropped)="drop($event)">
+      <div class="example-box" *ngFor="let chat of chats" cdkDrag>
+        {{chat.title}}
+      </div>
+    </div>
+    <div class="col-md-9 message-box">
+      <div class="messages">
+        <p>message</p>
+        <p>message</p>
+        <p>message</p>
+      </div>
+    <div class="input">
+      <textarea></textarea>
+    </div>
+    </div>
+  </div>
 </div>

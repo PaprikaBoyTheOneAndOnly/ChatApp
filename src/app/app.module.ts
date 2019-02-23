@@ -9,11 +9,12 @@ import {RouterModule, Routes} from "@angular/router";
 import {ReactiveFormsModule} from "@angular/forms";
 import { ChatComponent } from './chat/chat.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {DragDrop} from "@angular/cdk/drag-drop";
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'user', component: ChatComponent},
+  {path: '', component: LoginComponent},
 ];
 
 @NgModule({
@@ -27,7 +28,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    DragDrop,
+    DragDropModule,
     RouterModule.forRoot(
       appRoutes,
     )
