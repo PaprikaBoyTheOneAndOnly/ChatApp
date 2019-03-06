@@ -31,12 +31,12 @@ export class LoginComponent implements OnInit {
       this.service.validateInput(username, password).subscribe(
         response => {
           if (response) {
-            localStorage.setItem('Account', JSON.stringify(response));
+            localStorage.setItem('account', JSON.stringify(response));
             window.location.assign('user');
           } else {
             this.error = 'Please enter a valid username/password';
           }
-        },
+          },
         error => {
           console.log(error);
         }

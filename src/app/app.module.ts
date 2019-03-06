@@ -10,6 +10,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import { ChatComponent } from './chat/chat.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { SignUpComponent } from './sign-up/sign-up.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -30,6 +31,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    DragDropModule,
     RouterModule.forRoot(
       appRoutes,
     )
