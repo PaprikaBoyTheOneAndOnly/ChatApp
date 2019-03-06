@@ -8,7 +8,8 @@
       <div class="col-md-2"></div>
       <div class="col-md-8">
         <p>Username: </p>
-        <input type="text" class="form-control" formControlName="username" required>
+        <input type="text" class="form-control" formControlName="username">
+        <div *ngIf="error.user" class="error">Username must have at least 5 digits</div>
       </div>
       <div class="col-md-2"></div>
     </div>
@@ -17,7 +18,8 @@
       <div class="col-md-2"></div>
       <div class="col-md-8">
         <p>Password: </p>
-        <input type="Password" class="form-control" formControlName="password" required>
+        <input type="Password" class="form-control" formControlName="password" (ngModelChange)="passChanges('pass')">
+        <div *ngIf="error.pass" class="error">Password must have at least 8 digits</div>
       </div>
       <div class="col-md-2"></div>
     </div>
@@ -26,7 +28,8 @@
       <div class="col-md-2"></div>
       <div class="col-md-8">
         <p>Rewrite password: </p>
-        <input type="Password" class="form-control" formControlName="rePassword" required>
+        <input type="Password" class="form-control" formControlName="rePassword" (ngModelChange)="passChanges('rePass')">
+        <div *ngIf="error.rePass" class="error">Passwords must be the same</div>
       </div>
       <div class="col-md-2"></div>
     </div>
@@ -37,22 +40,6 @@
         <button class="btn btn-primary" (click)="save()">Save</button>
       </div>
       <div class="col-md-2"></div>
-    </div>
-
-    <div *ngIf="username.invalid && (username.dirty || username.touched)"
-         class="alert alert-danger">
-
-      <div *ngIf="username.errors.required">
-        Name is required.
-      </div>
-      <div *ngIf="username.errors.minlength">
-        Name must be at least 4 characters long.
-      </div>
-
-    </div>
-
-    <div *ngIf="error" class="alert alert-danger text-center" role="alert">
-      {{error}}
     </div>
   </div>
 </div>

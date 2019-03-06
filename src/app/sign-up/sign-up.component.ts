@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, Validators} from '@angular/forms';
 import {AppService} from '../app.service';
 
@@ -24,6 +24,12 @@ export class SignUpComponent implements OnInit {
       ])
     });
 
+  error = {
+    user: '',
+    pass: '',
+    rePass: '',
+  };
+
   constructor(private fb: FormBuilder, private service: AppService) {
 
   }
@@ -33,6 +39,33 @@ export class SignUpComponent implements OnInit {
   }
 
   save() {
+    this.error = {
+      user: '',
+      pass: '',
+      rePass: '',
+    };
 
+    if (this.signUpForm.invalid) {
+      if (this.signUpForm.get('username').errors) {
+        this.error.user = 'Username must have at least 5 digits';
+      }
+      if (this.signUpForm.get('password').errors) {
+        this.error.pass = 'password must have at least 8 digits';
+      }
+      if (this.signUpForm.get('rePassword').value !== this.signUpForm.get('password').value) {
+        this.error.rePass = 'Both password fields must have the same value';
+      }
+    }
+  }
+
+  passChanges(event: any) {
+    if (event === 'rePass') {
+      this.signUpForm.get('rePassword').markAsTouched();
+    }
+    if (this.signUpForm.get('rePassword').value !== this.signUpForm.get('password').value && this.signUpForm.get('rePassword').touched) {
+      this.error.rePass = 'Both password fields must have the same value';
+    } else {
+      this.error.rePass = '';
+    }
   }
 }

@@ -46,4 +46,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  signIn() {
+    window.location.assign('sign');
+  }
 }

@@ -1,9 +1,11 @@
 .head {
   margin-top: 10%;
 }
-
 .form-control {
-  margin-bottom: 10px!important;
+}
+
+.col-md-8 {
+  margin: 5px;
 }
 
 .container {
@@ -19,4 +21,13 @@
 
 .alert {
   margin-top: 10%;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+}
+
+p {
+  margin: 0;
 }
