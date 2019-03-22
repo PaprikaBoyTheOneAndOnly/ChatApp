@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
 
     if (username && password) {
       this.error = '';
-      this.service.validateInput(username, password).subscribe(
+      this.service.validateInput({username, password, loggedIn: null}).subscribe(
         response => {
           if (response) {
             localStorage.setItem('account', JSON.stringify(response));

@@ -1,16 +1,7 @@
-import {HttpClient, HttpParams} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
-
-export interface message {
-  index: number;
-  message: string;
-}
-
-export interface userI {
-  username: string;
-  password: string;
-}
+import {Account} from "./data-model";
 
 @Injectable()
 export class AppService {
@@ -23,9 +14,17 @@ export class AppService {
   }
 
 
-  validateInput(username: string, password: string):any {
+  validateInput(account: Account): any {
     return this.http.post<any>("http://localhost:8080/ChatAppService_war/validateAccount",
-      JSON.stringify({username, password, loggedIn:true}), {
+      JSON.stringify(account), {
+        headers: {'Content-Type': 'application/json; charset=utf-8'}
+      }
+    );
+  }
+
+  createAccount(account: Account): any {
+    return this.http.post<any>("http://localhost:8080/ChatAppService_war/createNewAccount",
+      JSON.stringify(account), {
         headers: {'Content-Type': 'application/json; charset=utf-8'}
       }
     );

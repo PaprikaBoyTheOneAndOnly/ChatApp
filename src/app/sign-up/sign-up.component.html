@@ -41,6 +41,11 @@
       </div>
       <div class="col-md-2"></div>
     </div>
+    <div class="row" *ngIf="error.exists">
+      <div class="col-md-12">
+        <div class="error">Account already exists</div>
+      </div>
+    </div>
   </div>
 </div>
 

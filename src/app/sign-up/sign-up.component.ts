@@ -28,6 +28,7 @@ export class SignUpComponent implements OnInit {
     user: '',
     pass: '',
     rePass: '',
+    exists: false,
   };
 
   constructor(private fb: FormBuilder, private service: AppService) {
@@ -43,6 +44,7 @@ export class SignUpComponent implements OnInit {
       user: '',
       pass: '',
       rePass: '',
+      exists: false,
     };
 
     if (this.signUpForm.invalid) {
@@ -55,6 +57,24 @@ export class SignUpComponent implements OnInit {
       if (this.signUpForm.get('rePassword').value !== this.signUpForm.get('password').value) {
         this.error.rePass = 'Both password fields must have the same value';
       }
+    } else {
+      this.service.createAccount({
+        username: this.signUpForm.get('username').value,
+        password: this.signUpForm.get('password').value,
+        loggedIn: false
+      }).subscribe(
+        response => {
+          if (response) {
+            localStorage.setItem('account', JSON.stringify(response));
+            window.location.assign('user');
+          } else {
+            this.error.exists = true;
+          }
+        },
+        error => {
+          console.log(error);
+        }
+      );
     }
   }
 
