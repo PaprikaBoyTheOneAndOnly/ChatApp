@@ -3,7 +3,9 @@ import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {Account} from "./data-model";
 
-@Injectable()
+@Injectable({
+  providedIn: "root"
+})
 export class AppService {
 
   constructor(private http: HttpClient) {
