@@ -1,7 +1,7 @@
 import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
-import {Account} from "./data-model";
+import {IAccount} from "./data-model";
 
 @Injectable({
   providedIn: "root"
@@ -16,7 +16,7 @@ export class AppService {
   }
 
 
-  validateInput(account: Account): any {
+  validateInput(account: IAccount): any {
     return this.http.post<any>("http://localhost:8080/ChatAppService_war/validateAccount",
       JSON.stringify(account), {
         headers: {'Content-Type': 'application/json; charset=utf-8'}
@@ -24,8 +24,16 @@ export class AppService {
     );
   }
 
-  createAccount(account: Account): any {
+  createAccount(account: IAccount): any {
     return this.http.post<any>("http://localhost:8080/ChatAppService_war/createNewAccount",
+      JSON.stringify(account), {
+        headers: {'Content-Type': 'application/json; charset=utf-8'}
+      }
+    );
+  }
+
+  getChatFromAccount(account: IAccount) {
+    return this.http.post<any>("http://localhost:8080/ChatAppService_war/getChatFromAccount",
       JSON.stringify(account), {
         headers: {'Content-Type': 'application/json; charset=utf-8'}
       }

@@ -1,19 +1,12 @@
 <div class="container card">
-  <div class="row content">
-    <div cdkDropList class="col-md-3 chat-container example-list" (cdkDropListDropped)="drop($event)">
-      <div class="example-box" *ngFor="let chat of chats" cdkDrag>
-        {{chat.title}}
-      </div>
+  <div *ngIf="chat != null" class="row content">
+    <div *ngFor="let message of  chat.receiver.messages">
+      {{message.message}}
+      {{message.timestamp}}
     </div>
-    <div class="col-md-9 message-box">
-      <div class="messages">
-        <p>message</p>
-        <p>message</p>
-        <p>message</p>
-      </div>
-    <div class="input">
-      <textarea></textarea>
-    </div>
+    <div *ngFor="let message of  chat.sender.messages">
+      {{message.message}}
+      {{message.timestamp}}
     </div>
   </div>
 </div>

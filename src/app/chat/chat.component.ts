@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
+import {AppService} from "../app.service";
+import {IAccount, IChat} from "../data-model";
 
 @Component({
   selector: 'app-chat',
@@ -8,24 +9,23 @@ import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 })
 export class ChatComponent implements OnInit {
 
-  chats = [
-    {title:"Chat One"},
-    {title:"Chat Two"},
-    {title:"Chat Three"},
-    {title:"Chat Four"},
-  ]
+  chat:IChat;
 
-  constructor() { }
+  constructor(private service: AppService) { }
 
   ngOnInit() {
-    const account = JSON.parse(localStorage.getItem('account'));
+    const account:IAccount = JSON.parse(localStorage.getItem('account'));
     if(account == null) {
       window.location.href = '/login';
     }
-  }
 
-  drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.chats, event.previousIndex, event.currentIndex);
+    this.service.getChatFromAccount(account).subscribe(response => {
+      console.log(response)
+        this.chat = response.chat;
+        console.log(this.chat)
+    }, error => {
+      console.log(error);
+    })
   }
 
 }
