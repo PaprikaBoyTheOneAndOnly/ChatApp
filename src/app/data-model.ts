@@ -4,30 +4,16 @@ export interface IAccount {
   loggedIn: boolean
 }
 
-export interface IMessage {
-  timestamp: ILocalDateTime;
-  message: string;
-}
-
 export interface IChat {
-  receiver: {
-    messages: IMessage[];
-  };
-  sender: {
-    messages: IMessage[];
-  }
+  messages: IMessage[];
 }
 
-export interface ILocalDateTime {
-  date: {
-    day: number;
-    month: number;
-    year: number;
-  }
-  time: {
-    hour: number;
-    minute: number;
-    nano: number;
-    second: number;
-  }
+export interface IMessage {
+  text: string;
+  status: CHAT_STATUS;
+}
+
+export enum CHAT_STATUS {
+  RECEIVED = 1,
+  SENT = 0,
 }

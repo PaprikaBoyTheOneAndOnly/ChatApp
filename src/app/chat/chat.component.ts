@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AppService} from "../app.service";
-import {IAccount, IChat} from "../data-model";
+import {CHAT_STATUS, IAccount, IChat} from "../data-model";
+import {FormBuilder, FormControl, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-chat',
@@ -9,23 +10,41 @@ import {IAccount, IChat} from "../data-model";
 })
 export class ChatComponent implements OnInit {
 
-  chat:IChat;
+  chats: IChat[];
+  user: IAccount;
 
-  constructor(private service: AppService) { }
+  messageForm = this.fb.group(
+    {
+      text: new FormControl('', Validators.required)
+    });
+
+  constructor(private service: AppService, private fb: FormBuilder) {
+  }
 
   ngOnInit() {
-    const account:IAccount = JSON.parse(localStorage.getItem('account'));
-    if(account == null) {
+    const account: IAccount = JSON.parse(localStorage.getItem('account'));
+    if (account == null) {
       window.location.href = '/login';
     }
 
     this.service.getChatFromAccount(account).subscribe(response => {
-      console.log(response)
-        this.chat = response.chat;
-        console.log(this.chat)
+      this.chats = response;
     }, error => {
-      console.log(error);
-    })
+      console.log(`ERROR: ${error}`);
+    });
+
+    this.user = JSON.parse(localStorage.getItem('account'));
+  }
+
+  sendMessage() {
+    if(this.messageForm.valid) {
+      this.chats[0].messages.push({
+        status: CHAT_STATUS.SENT,
+        text: this.messageForm.get("text").value
+      });
+
+      this.messageForm.reset("text");
+    }
   }
 
 }
