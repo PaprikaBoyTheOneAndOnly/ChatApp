@@ -1,13 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl} from '@angular/forms';
 import {AppService} from '../app.service';
+import {LoginService} from "../services/app.login-service";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   loginForm = this.fb.group(
     {
       username: new FormControl(''),
@@ -16,32 +17,34 @@ export class LoginComponent implements OnInit {
 
   error = '';
 
-  constructor(private fb: FormBuilder, private service: AppService) {
+  constructor(private fb: FormBuilder,
+              private service: AppService,
+              private loginService: LoginService) {
   }
 
   ngOnInit() {
     localStorage.removeItem('account');
+
+    this.loginService.onResponse().subscribe(response => {
+        if (response) {
+          localStorage.setItem('account', JSON.stringify(response));
+          window.location.assign('user');
+        } else {
+          this.error = 'Please enter a valid username/password';
+        }
+      },
+      error => {
+        console.log(error);
+      });
   }
 
-  login() {
+  onLoginClicked() {
     const username = this.loginForm.controls.username.value;
     const password = this.loginForm.controls.password.value;
 
     if (username && password) {
       this.error = '';
-      this.service.validateInput({username, password, loggedIn: null}).subscribe(
-        response => {
-          if (response) {
-            localStorage.setItem('account', JSON.stringify(response));
-            window.location.assign('user');
-          } else {
-            this.error = 'Please enter a valid username/password';
-          }
-          },
-        error => {
-          console.log(error);
-        }
-      );
+      this.loginService.validateLogin({username, password, loggedIn: null});
     } else {
       this.error = 'Please fill all gaps';
     }
@@ -49,5 +52,10 @@ export class LoginComponent implements OnInit {
 
   signIn() {
     window.location.assign('sign');
+  }
+
+  ngOnDestroy() {
+    console.log("service disconnect: ")
+    this.loginService.disconnect();
   }
 }

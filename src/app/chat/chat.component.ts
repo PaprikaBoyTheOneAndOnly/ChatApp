@@ -19,6 +19,7 @@ export class ChatComponent implements OnInit {
     });
 
   constructor(private service: AppService, private fb: FormBuilder) {
+
   }
 
   ngOnInit() {
@@ -37,7 +38,7 @@ export class ChatComponent implements OnInit {
   }
 
   sendMessage() {
-    if(this.messageForm.valid) {
+    if (this.messageForm.valid) {
       this.chats[0].messages.push({
         status: CHAT_STATUS.SENT,
         text: this.messageForm.get("text").value
