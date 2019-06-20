@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {Observable, of} from "rxjs";
+import {observable, Observable, of} from "rxjs";
 import {IAccount} from "../data-model";
 import * as SockJS from 'sockjs-client';
 import {Stomp} from "@stomp/stompjs";
@@ -9,28 +9,28 @@ import {Stomp} from "@stomp/stompjs";
 })
 export class LoginService {
   private stompClient;
-  private connected = false;
 
   constructor() {
-    const socket = new SockJS('/my-chat-app');
+    const socket = new SockJS('http://localhost:8080/my-chat-app');
     this.stompClient = Stomp.over(socket);
+
+  }
+
+  connect(observer) {
     this.stompClient.connect({}, (frame) => {
-      console.log("Connected: " + frame)
-      this.connected = true;
-    })
+      this.stompClient.subscribe("/setLogin", response => {
+        console.log(response);
+      });
+    });
   }
 
   validateLogin(account: IAccount) {
     this.stompClient.send('/chat-app/validateLogin', {}, JSON.stringify(account));
   }
 
-  onResponse(): Observable<boolean> {
-    return this.stompClient.subscribe('/user/login/setLogin', validLogin => {
-      return of(validLogin);
-    });
-  }
 
   disconnect() {
-
+    this.stompClient.disconnect();
   }
+
 }

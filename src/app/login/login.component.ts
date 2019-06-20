@@ -2,6 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl} from '@angular/forms';
 import {AppService} from '../app.service';
 import {LoginService} from "../services/app.login-service";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-login',
@@ -25,18 +26,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit() {
     localStorage.removeItem('account');
 
-    this.loginService.onResponse().subscribe(response => {
-        if (response) {
-          localStorage.setItem('account', JSON.stringify(response));
-          window.location.assign('user');
-        } else {
-          this.error = 'Please enter a valid username/password';
-        }
-      },
-      error => {
-        console.log(error);
-      });
+    this.loginService.connect( response => {
+      console.log(response);
+    });
   }
+
+
 
   onLoginClicked() {
     const username = this.loginForm.controls.username.value;
