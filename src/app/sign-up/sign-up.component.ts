@@ -1,13 +1,13 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, Validators} from '@angular/forms';
-import {AppService} from '../app.service';
+import {AccountService} from "../services/app.account-service";
 
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.css']
 })
-export class SignUpComponent implements OnInit {
+export class SignUpComponent implements OnInit, OnDestroy {
   signUpForm = this.fb.group(
     {
       username: new FormControl('', [
@@ -28,15 +28,26 @@ export class SignUpComponent implements OnInit {
     user: '',
     pass: '',
     rePass: '',
-    exists: false,
+    exists: '',
   };
 
-  constructor(private fb: FormBuilder, private service: AppService) {
+  constructor(private fb: FormBuilder,
+              private service: AccountService) {
 
   }
 
   ngOnInit() {
-
+    this.service.subscribe({
+      next: response => {
+          localStorage.setItem('account', JSON.stringify(response));
+          window.location.assign('user');
+      },
+      error: err => {
+        this.error.exists = err;
+      },
+      complete: () => {
+      }
+    });
   }
 
   save() {
@@ -44,7 +55,7 @@ export class SignUpComponent implements OnInit {
       user: '',
       pass: '',
       rePass: '',
-      exists: false,
+      exists: '',
     };
 
     if (this.signUpForm.invalid) {
@@ -62,19 +73,7 @@ export class SignUpComponent implements OnInit {
         username: this.signUpForm.get('username').value,
         password: this.signUpForm.get('password').value,
         loggedIn: false
-      }).subscribe(
-        response => {
-          if (response) {
-            localStorage.setItem('account', JSON.stringify(response));
-            window.location.assign('user');
-          } else {
-            this.error.exists = true;
-          }
-        },
-        error => {
-          console.log(error);
-        }
-      );
+      })
     }
   }
 
@@ -87,5 +86,13 @@ export class SignUpComponent implements OnInit {
     } else {
       this.error.rePass = '';
     }
+  }
+
+  ngOnDestroy() {
+    this.service.disconnect();
+  }
+
+  back() {
+    window.location.assign('login');
   }
 }

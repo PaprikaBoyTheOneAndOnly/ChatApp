@@ -16,14 +16,6 @@ export class AppService {
   }
 
 
-  validateInput(account: IAccount): any {
-    return this.http.post<any>("http://localhost:8080/ChatAppService_war/validateAccount",
-      JSON.stringify(account), {
-        headers: {'Content-Type': 'application/json; charset=utf-8'}
-      }
-    );
-  }
-
   createAccount(account: IAccount): any {
     return this.http.post<any>("http://localhost:8080/ChatAppService_war/createNewAccount",
       JSON.stringify(account), {
