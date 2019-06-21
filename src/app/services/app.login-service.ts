@@ -1,9 +1,8 @@
 import {Injectable} from "@angular/core";
-import {Observable, of} from "rxjs";
+import {observable, Observable, of} from "rxjs";
 import {IAccount} from "../data-model";
 import * as SockJS from 'sockjs-client';
 import {Stomp} from "@stomp/stompjs";
-import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: "root"
@@ -16,7 +15,6 @@ export class LoginService {
   constructor() {
     const socket = new SockJS('http://localhost:8080/my-chat-app');
     this.stompClient = Stomp.over(socket);
-
     this.stompClient.connect({}, (frame) => {
       console.log("Connected: " + frame);
       /*this.test = new Promise<IAccount>((resolve) => {
@@ -38,4 +36,5 @@ export class LoginService {
   disconnect() {
     this.stompClient.disconnect();
   }
+
 }
