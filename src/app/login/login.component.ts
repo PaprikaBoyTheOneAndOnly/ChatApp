@@ -25,13 +25,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit() {
     localStorage.removeItem('account');
 
-    this.loginService.onResponse().subscribe(response => {
-        if (response) {
-          localStorage.setItem('account', JSON.stringify(response));
-          window.location.assign('user');
-        } else {
-          this.error = 'Please enter a valid username/password';
-        }
+    this.loginService.onResponse().then(response => {
+        console.log(response);
       },
       error => {
         console.log(error);

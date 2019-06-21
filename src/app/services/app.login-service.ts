@@ -3,34 +3,39 @@ import {Observable, of} from "rxjs";
 import {IAccount} from "../data-model";
 import * as SockJS from 'sockjs-client';
 import {Stomp} from "@stomp/stompjs";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: "root"
 })
 export class LoginService {
   private stompClient;
-  private connected = false;
+  test: Promise<IAccount> = new Promise<IAccount>(() => {
+  });
 
   constructor() {
-    const socket = new SockJS('/my-chat-app');
+    const socket = new SockJS('http://localhost:8080/my-chat-app');
     this.stompClient = Stomp.over(socket);
+
     this.stompClient.connect({}, (frame) => {
-      console.log("Connected: " + frame)
-      this.connected = true;
-    })
-  }
-
-  validateLogin(account: IAccount) {
-    this.stompClient.send('/chat-app/validateLogin', {}, JSON.stringify(account));
-  }
-
-  onResponse(): Observable<boolean> {
-    return this.stompClient.subscribe('/user/login/setLogin', validLogin => {
-      return of(validLogin);
+      console.log("Connected: " + frame);
+      /*this.test = new Promise<IAccount>((resolve) => {
+        console.log("here");*/
+      this.stompClient.subscribe('/login/setLogin', validLogin => {
+        return of(validLogin);
+      });
     });
   }
 
-  disconnect() {
+  validateLogin(account: IAccount) {
+    this.stompClient.send('/chatApp/validate', {}, JSON.stringify(account));
+  }
 
+  onResponse(): Promise<IAccount> {
+    return this.test;
+  }
+
+  disconnect() {
+    this.stompClient.disconnect();
   }
 }
