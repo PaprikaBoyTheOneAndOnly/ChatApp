@@ -20,6 +20,14 @@
       true,
       "rxjs/Rx"
     ],
+    "ordered-imports": [
+      true,
+      {
+        "import-sources-order": "case-insensitive",
+        "named-imports-order": "case-insensitive",
+        "grouped-imports": false
+      }
+    ],
     "import-spacing": true,
     "indent": [
       true,
@@ -86,7 +94,9 @@
     "prefer-const": true,
     "quotemark": [
       true,
-      "single"
+      "single",
+      "avoid-template",
+      "avoid-escape"
     ],
     "radix": true,
     "semicolon": [
