@@ -15,9 +15,17 @@ import {IAccount, IMessage} from '../data-model';
 
   subscribe(observer: Observer<IMessage>, account: IAccount) {
     this.connect(() => {
-      console.log(account);
       this.stompClient.send('/chatApp/connect', {}, JSON.stringify(account));
-      this.stompClient.subscribe('/user/chat/receiveChat', (response) => {
+      this.stompClient.subscribe('/user/chat/receiveMessage', (response) => {
+        const body = JSON.parse(response.body.replace('FORBIDDEN', 403));
+        if (body.code === '403') {
+          observer.error(body.reason);
+        } else {
+          observer.next(body);
+        }
+      });
+
+      this.stompClient.subscribe('/user/chat/receiveChats', (response) => {
         const body = JSON.parse(response.body.replace('FORBIDDEN', 403));
 
         if (body.code === '403') {
@@ -26,8 +34,10 @@ import {IAccount, IMessage} from '../data-model';
           observer.next(body);
         }
       });
+      this.stompClient.send('/chatApp/getMessages', {}, JSON.stringify(account));
     });
   }
+
 
   sendMessage(message: IMessage) {
     this.stompClient.send('/chatApp/sendMessage', {}, JSON.stringify(message));

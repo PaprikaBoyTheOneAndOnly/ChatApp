@@ -32,7 +32,15 @@ export class ChatComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.service.subscribe({
       next: value => {
-        this.chats.push(value);
+        console.log(value);
+        if (value.to === undefined) {
+          const chats =  Object.values(value)[0];
+          if (chats !== undefined) {
+            this.chats = chats;
+          }
+        } else {
+          this.chats.push(value);
+        }
         this.error = '';
       },
       error: err => {

@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     if (username && password) {
       this.error = '';
-      this.service.validateLogin({username, password, loggedIn: null, uuid: ''});
+      this.service.validateLogin({username, password, loggedIn: null, uuid: '', chats: null});
     } else {
       this.error = 'Please fill all gaps';
     }

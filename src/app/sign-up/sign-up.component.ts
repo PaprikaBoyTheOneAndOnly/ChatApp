@@ -74,6 +74,7 @@ export class SignUpComponent implements OnInit, OnDestroy {
         password: this.signUpForm.get('password').value,
         loggedIn: false,
         uuid: '',
+        chats: [],
       });
     }
   }

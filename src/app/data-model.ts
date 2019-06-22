@@ -2,6 +2,7 @@ export interface IAccount {
   username: string;
   password: string;
   loggedIn: boolean;
+  chats: Object[];
   uuid: string;
 }
 
