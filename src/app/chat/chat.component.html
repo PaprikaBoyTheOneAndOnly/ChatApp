@@ -1,19 +1,30 @@
-<div class="container card">
+<div class="container card" [formGroup]="messageForm">
   <div class="row">
-    <div class="col-md-12">
-      <h1>Hello: '{{user.username}}'</h1>
+    <div class="col-md-6">
+      <h1>Hello: '{{account.username}}'</h1>
+    </div>
+    <div class="col-md-6">
+      <div class="input-group mb-3" >
+        <input type="text" class="form-control"
+               placeholder="To User"
+               aria-describedby="basic-addon2"
+               formControlName="toUser">
+      </div>
+      <div *ngIf="error" class="alert alert-danger text-center" role="alert">
+      {{error}}
+    </div>
     </div>
   </div>
 
-  <div *ngIf="chats != null" class="row chat-field">
-    <div *ngFor="let message of chats[0].messages" [ngClass]="'col-md-12 message-'+message.status">
+  <div class="row chat-field">
+    <div *ngFor="let message of chats" [ngClass]="'col-md-12 message-' + wasSent(message)">
       <div class="bubble">{{message.text}}</div>
     </div>
   </div>
 
   <div class="row">
     <div class="col-md-12">
-      <div class="input-group mb-3" [formGroup]="messageForm">
+      <div class="input-group mb-3" >
         <input type="text" class="form-control"
                placeholder="Your text..."
                aria-describedby="basic-addon2"
@@ -24,5 +35,4 @@
       </div>
     </div>
   </div>
-
 </div>

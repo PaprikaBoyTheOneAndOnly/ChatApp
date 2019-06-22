@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl} from '@angular/forms';
-import {AccountService} from "../services/app.account-service";
+import {AccountService} from '../services/app.account-service';
 
 @Component({
   selector: 'app-login',
@@ -13,15 +13,14 @@ export class LoginComponent implements OnInit, OnDestroy {
       username: new FormControl(''),
       password: new FormControl('')
     });
-
   error = '';
 
   constructor(private fb: FormBuilder,
-              private service: AccountService) { }
+              private service: AccountService) {
+  }
 
   ngOnInit() {
     localStorage.removeItem('account');
-
     this.service.subscribe({
       next: value => {
         localStorage.setItem('account', JSON.stringify(value));
@@ -32,7 +31,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       },
       complete: () => {
       },
-    })
+    });
   }
 
   onLoginClicked() {
@@ -41,7 +40,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     if (username && password) {
       this.error = '';
-      this.service.validateLogin({username, password, loggedIn: null});
+      this.service.validateLogin({username, password, loggedIn: null, uuid: ''});
     } else {
       this.error = 'Please fill all gaps';
     }
@@ -52,7 +51,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log("service disconnect: ")
+    console.log('service disconnect: ');
     this.service.disconnect();
   }
 }

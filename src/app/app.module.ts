@@ -1,15 +1,15 @@
-import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 
-import {AppComponent} from './app.component';
-import {HttpClientModule} from '@angular/common/http';
-import {LoginComponent} from './login/login.component';
-import {RouterModule, Routes} from '@angular/router';
-import {ReactiveFormsModule} from '@angular/forms';
-import { ChatComponent } from './chat/chat.component';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { SignUpComponent } from './sign-up/sign-up.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import {HttpClientModule} from '@angular/common/http';
+import {ReactiveFormsModule} from '@angular/forms';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {RouterModule, Routes} from '@angular/router';
+import {AppComponent} from './app.component';
+import { ChatComponent } from './chat/chat.component';
+import {LoginComponent} from './login/login.component';
+import { SignUpComponent } from './sign-up/sign-up.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},

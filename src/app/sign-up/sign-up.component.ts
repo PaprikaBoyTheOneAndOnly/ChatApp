@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, Validators} from '@angular/forms';
-import {AccountService} from "../services/app.account-service";
+import {AccountService} from '../services/app.account-service';
 
 @Component({
   selector: 'app-sign-up',
@@ -72,8 +72,9 @@ export class SignUpComponent implements OnInit, OnDestroy {
       this.service.createAccount({
         username: this.signUpForm.get('username').value,
         password: this.signUpForm.get('password').value,
-        loggedIn: false
-      })
+        loggedIn: false,
+        uuid: '',
+      });
     }
   }
 
