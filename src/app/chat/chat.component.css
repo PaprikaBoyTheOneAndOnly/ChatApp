@@ -1,7 +1,7 @@
 .container {
   margin-top: 30px;
-  box-shadow: rgba(0,0,0,0.3) 10px 10px;
-    background-color: #ededa6;
+  box-shadow: rgba(0, 0, 0, 0.3) 10px 10px;
+  background-color: #ededa6;
   height: 100%;
 }
 
@@ -17,10 +17,8 @@
   margin: 4px;
 }
 
-.message-0{
+.message-0 {
   text-align: right;
-}
-.message-1 {
 }
 
 .message-0 .bubble {
@@ -31,5 +29,14 @@
   background-color: #a6b6ed;
 }
 
-.message-0 .bubble:after {
+.nav-item {
+  border-bottom: 1px solid black;
+  margin-bottom: 10px;
+}
+
+.chat-field {
+  position: relative;
+  height: 600px;
+  display: block;
+  overflow: auto;
 }

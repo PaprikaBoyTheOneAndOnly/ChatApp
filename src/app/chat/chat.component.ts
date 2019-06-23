@@ -10,9 +10,11 @@ import {ChatService} from '../services/app.chat-service';
 })
 export class ChatComponent implements OnInit, OnDestroy {
 
-  chats: IMessage[] = [];
+  currentChat: any[] = [];
+  allChats: any[];
   account: IAccount;
   error: '';
+  Object = Object;
 
   messageForm = this.fb.group({
     toUser: new FormControl('', Validators.required),
@@ -32,14 +34,14 @@ export class ChatComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.service.subscribe({
       next: value => {
-        console.log(value);
         if (value.to === undefined) {
-          const chats =  Object.values(value)[0];
+          const chats = Object.values(value)[0];
           if (chats !== undefined) {
-            this.chats = chats;
+            this.allChats = parseChats(value);
+            this.currentChat = chats;
           }
         } else {
-          this.chats.push(value);
+          this.currentChat.push(value);
         }
         this.error = '';
       },
@@ -75,4 +77,27 @@ export class ChatComponent implements OnInit, OnDestroy {
       return '0';
     }
   }
+
+  showChat(strings: string) {
+    this.allChats.forEach(chat => {
+      if (Object.keys(chat)[0] === strings) {
+        // @ts-ignore
+        this.currentChat =  Object.values(chat)[0];
+      }
+    });
+  }
+}
+
+function parseChats(object: any) {
+  const keys = Object.keys(object);
+  const values = Object.values(object);
+  const chats = [];
+
+  for (let i = 0; i < keys.length; i++) {
+    const obj = new Object();
+    obj[keys[i]] = values[i];
+    chats.push(obj);
+  }
+
+  return chats;
 }
