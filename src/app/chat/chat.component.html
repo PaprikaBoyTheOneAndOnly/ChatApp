@@ -3,15 +3,9 @@
     <div class="col-md-6">
       <h1>Hello: '{{account.username}}'</h1>
     </div>
-    <div class="col-md-6">
-      <div class="input-group mb-3">
-        <input type="text" class="form-control"
-               placeholder="To User"
-               aria-describedby="basic-addon2"
-               formControlName="toUser">
-      </div>
-      <div *ngIf="error" class="alert alert-danger text-center" role="alert">
-        {{error}}
+    <div class="col-md-6 add-field">
+      <div class="btn btn-primary btn-add">
+        <p>+</p>
       </div>
     </div>
   </div>
@@ -20,10 +14,10 @@
     <aside class="col-12 col-md-2 p-0">
       <nav class="navbar navbar-expand navbar-dark flex-md-column flex-row align-items-start">
         <div class="collapse navbar-collapse">
-         <ul  class="flex-md-column flex-row navbar-nav w-100 justify-content-between">
+          <ul class="flex-md-column flex-row navbar-nav w-100 justify-content-between">
             <li *ngFor="let chat of allChats">
               <div class="nav-item" (click)="showChat(Object.keys(chat)[0])">
-             {{ Object.keys(chat)}}
+                {{ Object.keys(chat)}}
               </div>
             </li>
           </ul>
@@ -35,6 +29,7 @@
       <div class="row chat-field">
         <div *ngFor="let message of currentChat" [ngClass]="'col-md-12 message-' + wasSent(message)">
           <div class="bubble">{{message.text}}</div>
+          {{scrollToBottom()}}
         </div>
       </div>
     </main>

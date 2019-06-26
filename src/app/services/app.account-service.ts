@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
-import {Stomp} from '@stomp/stompjs';
+import {Stomp, StompHeaders} from '@stomp/stompjs';
 import {Observer} from 'rxjs';
 import * as SockJS from 'sockjs-client';
 import {IAccount} from '../data-model';
+import {HttpHeaders} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -40,8 +41,12 @@ export class AccountService {
     this.stompClient = Stomp.over(socket);
     this.stompClient.debug = () => {
     };
-    this.stompClient.connect({ },
-     () => callback());
+
+    let thisheaders = new HttpHeaders();
+    thisheaders.append('login', 'peter');
+
+    this.stompClient.connect(thisheaders,
+      () => callback());
   }
 
 

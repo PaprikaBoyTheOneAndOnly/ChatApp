@@ -3,7 +3,6 @@ export interface IAccount {
   password: string;
   loggedIn: boolean;
   chats: Object[];
-  uuid: string;
 }
 
 export interface IMessage {

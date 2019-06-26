@@ -36,7 +36,22 @@
 
 .chat-field {
   position: relative;
-  height: 600px;
+  height: 70vh;
   display: block;
-  overflow: auto;
+  overflow-y: auto;
+}
+
+.btn-add p {
+  text-align: center;
+  color: white;
+  font-weight: bolder;
+}
+.btn-add {
+  height: 40px;
+  width: 40px;
+  font-size: 30px;
+}
+
+.add-field {
+  text-align: right;
 }

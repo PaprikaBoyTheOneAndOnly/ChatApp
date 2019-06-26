@@ -15,7 +15,6 @@ import {IAccount, IMessage} from '../data-model';
 
   subscribe(observer: Observer<IMessage>, account: IAccount) {
     this.connect(() => {
-      this.stompClient.send('/chatApp/connect', {}, JSON.stringify(account));
       this.stompClient.subscribe('/user/chat/receiveMessage', (response) => {
         const body = JSON.parse(response.body.replace('FORBIDDEN', 403));
         if (body.code === '403') {
@@ -35,7 +34,7 @@ import {IAccount, IMessage} from '../data-model';
         }
       });
       this.stompClient.send('/chatApp/getMessages', {}, JSON.stringify(account));
-    });
+    }, account.username);
   }
 
 
@@ -43,8 +42,8 @@ import {IAccount, IMessage} from '../data-model';
     this.stompClient.send('/chatApp/sendMessage', {}, JSON.stringify(message));
   }
 
-  private connect(callback) {
-    const socket = new SockJS('http://localhost:8080/my-chat-app');
+  private connect(callback, username: string) {
+    const socket = new SockJS('http://localhost:8080/my-chat-app?username='+username);
     this.stompClient = Stomp.over(socket);
     this.stompClient.debug = () => {
     };

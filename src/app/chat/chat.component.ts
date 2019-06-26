@@ -11,13 +11,13 @@ import {ChatService} from '../services/app.chat-service';
 export class ChatComponent implements OnInit, OnDestroy {
 
   currentChat: any[] = [];
+  currentChatUserTo = '';
   allChats: any[];
   account: IAccount;
   error: '';
   Object = Object;
 
   messageForm = this.fb.group({
-    toUser: new FormControl('', Validators.required),
     text: new FormControl('', Validators.required)
   });
 
@@ -48,8 +48,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       error: err => {
         this.error = err;
       },
-      complete: () => {
-
+      complete: () => {;
       }
     }, this.account);
   }
@@ -58,12 +57,17 @@ export class ChatComponent implements OnInit, OnDestroy {
     if (this.messageForm.valid) {
       const message = {
         from: this.account.username,
-        to: this.messageForm.controls.toUser.value,
+        to: this.currentChatUserTo,
         text: this.messageForm.controls.text.value,
       };
       this.service.sendMessage(message);
       this.messageForm.controls.text.setValue('');
     }
+  }
+
+  private scrollToBottom() {
+    let chatField = document.querySelector('.chat-field');
+    chatField.scrollTop = chatField.scrollHeight - chatField.clientHeight;
   }
 
   ngOnDestroy(): void {
@@ -78,11 +82,11 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
   }
 
-  showChat(strings: string) {
+  showChat(username: string) {
     this.allChats.forEach(chat => {
-      if (Object.keys(chat)[0] === strings) {
-        // @ts-ignore
-        this.currentChat =  Object.values(chat)[0];
+      if (Object.keys(chat)[0] === username) {
+        this.currentChat = <Array<any>>Object.values(chat)[0];
+        this.currentChatUserTo = username;
       }
     });
   }
