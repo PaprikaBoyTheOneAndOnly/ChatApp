@@ -1,17 +1,19 @@
-import {Injectable} from '@angular/core';
-import {Stomp, StompHeaders} from '@stomp/stompjs';
+import {Inject, Injectable} from '@angular/core';
+import {Stomp} from '@stomp/stompjs';
 import {Observer} from 'rxjs';
 import * as SockJS from 'sockjs-client';
 import {IAccount} from '../data-model';
-import {HttpHeaders} from "@angular/common/http";
+import {HttpHeaders} from '@angular/common/http';
+import {Service} from "./app.service";
 
 @Injectable({
   providedIn: 'root'
 })
-export class AccountService {
+export class AccountService extends Service {
   private stompClient;
 
   constructor() {
+    super(null);
   }
 
   validateLogin(account: IAccount) {
@@ -37,7 +39,7 @@ export class AccountService {
   }
 
   private connect(callback) {
-    const socket = new SockJS('http://localhost:8080/my-chat-app');
+    const socket = new SockJS('http://localhost:' + this.serverPort + '/my-chat-app');
     this.stompClient = Stomp.over(socket);
     this.stompClient.debug = () => {
     };
