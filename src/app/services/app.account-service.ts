@@ -1,19 +1,16 @@
 import {Inject, Injectable} from '@angular/core';
-import {Stomp} from '@stomp/stompjs';
 import {Observer} from 'rxjs';
-import * as SockJS from 'sockjs-client';
 import {IAccount} from '../data-model';
-import {HttpHeaders} from '@angular/common/http';
 import {Service} from "./app.service";
+import {SERVER_PORT} from "../app.configurations";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService extends Service {
-  private stompClient;
 
-  constructor() {
-    super(null);
+  constructor(@Inject(SERVER_PORT) private portForSuperclass: number) {
+    super(portForSuperclass);
   }
 
   validateLogin(account: IAccount) {
@@ -25,7 +22,7 @@ export class AccountService extends Service {
   }
 
   subscribe(observer: Observer<IAccount>) {
-    this.connect(() => {
+    super.connect(() => {
       this.stompClient.subscribe('/user/login/setLogin', (response) => {
         const body = JSON.parse(response.body.replace('FORBIDDEN', 403));
 
@@ -38,23 +35,7 @@ export class AccountService extends Service {
     });
   }
 
-  private connect(callback) {
-    const socket = new SockJS('http://localhost:' + this.serverPort + '/my-chat-app');
-    this.stompClient = Stomp.over(socket);
-    this.stompClient.debug = () => {
-    };
-
-    let thisheaders = new HttpHeaders();
-    thisheaders.append('login', 'peter');
-
-    this.stompClient.connect(thisheaders,
-      () => callback());
-  }
-
-
   disconnect() {
     this.stompClient.disconnect();
   }
-
-
 }

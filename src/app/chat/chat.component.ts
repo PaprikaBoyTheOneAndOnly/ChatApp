@@ -2,6 +2,8 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, Validators} from '@angular/forms';
 import {IAccount, IMessage} from '../data-model';
 import {ChatService} from '../services/app.chat-service';
+import {MatDialog} from "@angular/material";
+import {AddChatModalComponent} from "./add-chat-modal/add-chat-modal.component";
 
 @Component({
   selector: 'app-chat',
@@ -22,7 +24,8 @@ export class ChatComponent implements OnInit, OnDestroy {
   });
 
   constructor(private service: ChatService,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              public dialog: MatDialog,) {
     const account: IAccount = JSON.parse(localStorage.getItem('account'));
     if (account == null) {
       window.location.href = '/login';
@@ -90,6 +93,16 @@ export class ChatComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  addChat() {
+    let dialogRef = this.dialog.open(AddChatModalComponent, {
+      data: {}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+    });
+  }
+
 }
 
 function parseChats(object: any) {

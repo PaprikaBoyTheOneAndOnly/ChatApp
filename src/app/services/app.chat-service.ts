@@ -1,20 +1,20 @@
-import {Injectable} from '@angular/core';
-import {Stomp} from '@stomp/stompjs';
+import {Inject, Injectable} from '@angular/core';
 import {Observer} from 'rxjs';
-import * as SockJS from 'sockjs-client';
 import {IAccount, IMessage} from '../data-model';
+import {Service} from "./app.service";
+import {SERVER_PORT} from "../app.configurations";
 
 @Injectable({
   providedIn: 'root'
 })
-  export class ChatService {
-  private stompClient;
+  export class ChatService extends Service{
 
-  constructor() {
+  constructor(@Inject(SERVER_PORT) private portForSuperclass: number) {
+    super(portForSuperclass);
   }
 
   subscribe(observer: Observer<IMessage>, account: IAccount) {
-    this.connect(() => {
+    super.connect(() => {
       this.stompClient.subscribe('/user/chat/receiveMessage', (response) => {
         const body = JSON.parse(response.body.replace('FORBIDDEN', 403));
         if (body.code === '403') {
@@ -41,16 +41,6 @@ import {IAccount, IMessage} from '../data-model';
   sendMessage(message: IMessage) {
     this.stompClient.send('/chatApp/sendMessage', {}, JSON.stringify(message));
   }
-
-  private connect(callback, username: string) {
-    const socket = new SockJS('http://localhost:8080/my-chat-app?username='+username);
-    this.stompClient = Stomp.over(socket);
-    this.stompClient.debug = () => {
-    };
-    this.stompClient.connect({ },
-      () => callback());
-  }
-
 
   disconnect() {
     this.stompClient.disconnect();
