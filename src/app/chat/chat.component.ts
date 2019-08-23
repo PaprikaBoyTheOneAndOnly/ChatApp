@@ -7,6 +7,9 @@ import {ChatModalComponent} from "./chat-modal/chat-modal.component";
 import {Router} from "@angular/router";
 import {getAccount, IClientState} from "../store/login.reducer";
 import {select, Store} from "@ngrx/store";
+import {Subject} from "rxjs";
+import {takeUntil} from "rxjs/operators";
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-chat',
@@ -15,8 +18,7 @@ import {select, Store} from "@ngrx/store";
 })
 export class ChatComponent implements OnInit, OnDestroy {
 
-  currentChat: any[] = [];
-  currentChatUserTo = '';
+  currentChatUserTo = 'Username';
   allChats: any[];
   account: IAccount;
   error: '';
@@ -40,14 +42,12 @@ export class ChatComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.service.subscribe({
       next: value => {
-        if (value.to === undefined) {
-          const chats = Object.values(value)[0];
-          if (chats !== undefined) {
-            this.allChats = parseChats(value);
-            this.currentChat = chats;
-          }
+        //initialization of all chats
+        if(value.to === undefined) {
+          this.allChats = parseChats(value);
         } else {
-          this.currentChat.push(value);
+          //TODO receive and send chat
+
         }
         this.error = '';
       },
@@ -57,6 +57,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       complete: () => {
       }
     });
+
   }
 
   sendMessage() {
@@ -91,21 +92,44 @@ export class ChatComponent implements OnInit, OnDestroy {
   showChat(username: string) {
     this.allChats.forEach(chat => {
       if (Object.keys(chat)[0] === username) {
-        this.currentChat = <Array<any>>Object.values(chat)[0];
         this.currentChatUserTo = username;
       }
     });
   }
 
   addChat() {
-    let dialogRef = this.dialog.open(ChatModalComponent, {
-      data: {}
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-    });
+    const until$ = new Subject();
+    until$.complete()
+    this.dialog.open(ChatModalComponent, {data: {}})
+      .afterClosed()
+      .pipe(takeUntil(until$))
+      .subscribe(result => {
+        if (result && !this.isExistingChat(result)) {
+          const obj = new Object();
+          obj[result] = [];
+          this.allChats.push(obj)
+        }
+        until$.complete();
+      });
   }
 
+  getCurrentChat() {
+    let curChat = [];
+    if (this.allChats) {
+      this.allChats.forEach(chat => {
+        if (Object.keys(chat)[0] === this.currentChatUserTo) {
+
+          curChat.push(chat)
+        }
+      })
+    }
+
+    return curChat;
+  }
+
+  private isExistingChat(username): boolean {
+    return this.allChats.find(chat => Object.keys(chat)[0] === username);
+  }
 }
 
 function parseChats(object: any) {

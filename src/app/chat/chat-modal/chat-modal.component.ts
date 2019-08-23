@@ -9,7 +9,7 @@ import {ChatService} from "../../services/app.chat-service";
   styleUrls: ['./chat-modal.component.css']
 })
 export class ChatModalComponent {
-  error: string = 'Not Found';
+  error: string;
 
   constructor(private dialogRef: MatDialogRef<ChatModalComponent>,
               private service: ChatService,

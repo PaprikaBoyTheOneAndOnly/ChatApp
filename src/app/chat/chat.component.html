@@ -27,7 +27,7 @@
 
     <main class="col">
       <div class="row chat-field">
-        <div *ngFor="let message of currentChat" [ngClass]="'col-md-12 message-' + wasSent(message)">
+        <div *ngFor="let message of getCurrentChat()" [ngClass]="'col-md-12 message-' + wasSent(message)">
           <div class="bubble">{{message.text}}</div>
           {{scrollToBottom()}}
         </div>
