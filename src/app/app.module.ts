@@ -10,7 +10,7 @@ import {AppComponent} from './app.component';
 import {ChatComponent} from './chat/chat.component';
 import {LoginComponent} from './login/login.component';
 import {SignUpComponent} from './sign-up/sign-up.component';
-import {AddChatModalComponent} from './chat/add-chat-modal/add-chat-modal.component';
+import {ChatModalComponent} from './chat/add-chat-modal/chat-modal.component';
 import { MatDialogModule, MatFormFieldModule} from "@angular/material";
 import {environment} from "../environments/environment";
 import {StoreModule} from "@ngrx/store";
@@ -32,7 +32,7 @@ const appRoutes: Routes = [
     LoginComponent,
     ChatComponent,
     SignUpComponent,
-    AddChatModalComponent,
+    ChatModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,7 +57,7 @@ const appRoutes: Routes = [
     })
   ],
   entryComponents: [
-    AddChatModalComponent,
+    ChatModalComponent,
   ],
   bootstrap: [AppComponent]
 })

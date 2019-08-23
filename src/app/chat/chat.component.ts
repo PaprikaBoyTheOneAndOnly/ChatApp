@@ -3,7 +3,7 @@ import {FormBuilder, FormControl, Validators} from '@angular/forms';
 import {IAccount, IMessage} from '../data-model';
 import {ChatService} from '../services/app.chat-service';
 import {MatDialog} from "@angular/material";
-import {AddChatModalComponent} from "./add-chat-modal/add-chat-modal.component";
+import {ChatModalComponent} from "./add-chat-modal/chat-modal.component";
 import {Router} from "@angular/router";
 import {getAccount, IClientState} from "../store/login.reducer";
 import {select, Store} from "@ngrx/store";
@@ -98,7 +98,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   addChat() {
-    let dialogRef = this.dialog.open(AddChatModalComponent, {
+    let dialogRef = this.dialog.open(ChatModalComponent, {
       data: {}
     });
     dialogRef.afterClosed().subscribe(result => {
