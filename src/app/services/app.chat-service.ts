@@ -12,7 +12,7 @@ export class ChatService extends Service {
     super(injector);
   }
 
-  subscribe(observer: Observer<IMessage>, account: IAccount) {
+  subscribe(observer: Observer<IMessage>) {
     super.connect(() => {
       this.stompClient.subscribe('/user/chat/receiveMessage', (response) => {
         const body = JSON.parse(response.body.replace('FORBIDDEN', 403));
@@ -32,8 +32,8 @@ export class ChatService extends Service {
           observer.next(body);
         }
       });
-      this.stompClient.send('/chatApp/getMessages', {}, JSON.stringify(account));
-    }, account.username);
+      this.stompClient.send('/chatApp/getMessages', {}, JSON.stringify(this.account));
+    }, this.account.username);
   }
 
 

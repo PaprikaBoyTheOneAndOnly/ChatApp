@@ -5,18 +5,18 @@ import {
 } from '@angular/router';
 
 import {select, Store} from "@ngrx/store";
-import {IUserState} from "./store/user.reducer";
+import {getAccount, IClientState} from "./store/login.reducer";
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  private user = null;
+  private account = null;
 
-  constructor(private store: Store<IUserState>,
+  constructor(private store: Store<IClientState>,
               private router: Router) {
-    this.store.pipe(select('user')).subscribe(user => {
-      this.user = user;
+    this.store.pipe(select(getAccount)).subscribe(account => {
+      this.account = account;
     });
   }
 
@@ -25,7 +25,7 @@ export class AuthGuard implements CanActivate {
   }
 
   checkLoggedIn(): boolean {
-    if (this.user) {
+    if (this.account) {
       return true;
     }
 

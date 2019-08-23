@@ -1,6 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, Validators} from '@angular/forms';
 import {AccountService} from '../services/app.account-service';
+import {LogInUser} from "../store/login.action";
+import {IAccount} from "../data-model";
+import {IClientState} from "../store/login.reducer";
+import {Store} from "@ngrx/store";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-sign-up',
@@ -32,15 +37,16 @@ export class SignUpComponent implements OnInit, OnDestroy {
   };
 
   constructor(private fb: FormBuilder,
-              private service: AccountService) {
-
+              private service: AccountService,
+              private store: Store<IClientState>,
+              private router: Router) {
   }
 
   ngOnInit() {
     this.service.subscribe({
       next: response => {
-          localStorage.setItem('account', JSON.stringify(response));
-          window.location.assign('user');
+        this.store.dispatch(new LogInUser(response));
+        this.router.navigate(['/user']);
       },
       error: err => {
         this.error.exists = err;
@@ -94,6 +100,6 @@ export class SignUpComponent implements OnInit, OnDestroy {
   }
 
   back() {
-    window.location.assign('login');
+    this.router.navigate(['/login']);
   }
 }

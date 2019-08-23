@@ -15,7 +15,7 @@ import { MatDialogModule, MatFormFieldModule} from "@angular/material";
 import {environment} from "../environments/environment";
 import {StoreModule} from "@ngrx/store";
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
-import * as user from "./store/user.reducer";
+import * as login from "./store/login.reducer";
 import {AuthGuard} from "./auth-guard.service";
 import * as config from './app.configurations';
 
@@ -47,7 +47,7 @@ const appRoutes: Routes = [
     FormsModule,
     MatFormFieldModule,
     StoreModule.forRoot({
-      user: user.reducer,
+      client: login.reducer,
       config: config.reducer,
     }),
     StoreDevtoolsModule.instrument({
