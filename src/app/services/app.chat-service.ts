@@ -1,16 +1,15 @@
-import {Inject, Injectable} from '@angular/core';
+import {Inject, Injectable, Injector} from '@angular/core';
 import {Observer} from 'rxjs';
 import {IAccount, IMessage} from '../data-model';
 import {Service} from "./app.service";
-import {SERVER_PORT} from "../app.configurations";
 
 @Injectable({
   providedIn: 'root'
 })
-  export class ChatService extends Service{
+export class ChatService extends Service {
 
-  constructor(@Inject(SERVER_PORT) private portForSuperclass: number) {
-    super(portForSuperclass);
+  constructor(injector:Injector) {
+    super(injector);
   }
 
   subscribe(observer: Observer<IMessage>, account: IAccount) {
@@ -43,7 +42,9 @@ import {SERVER_PORT} from "../app.configurations";
   }
 
   disconnect() {
-    this.stompClient.disconnect();
+    if (this.stompClient) {
+      this.stompClient.disconnect();
+    }
   }
 
 

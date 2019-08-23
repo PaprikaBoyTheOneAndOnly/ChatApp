@@ -1,16 +1,15 @@
-import {Inject, Injectable} from '@angular/core';
+import {Inject, Injectable, Injector} from '@angular/core';
 import {Observer} from 'rxjs';
 import {IAccount} from '../data-model';
 import {Service} from "./app.service";
-import {SERVER_PORT} from "../app.configurations";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService extends Service {
 
-  constructor(@Inject(SERVER_PORT) private portForSuperclass: number) {
-    super(portForSuperclass);
+  constructor(injector: Injector) {
+    super(injector);
   }
 
   validateLogin(account: IAccount) {

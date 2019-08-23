@@ -4,6 +4,7 @@ import {IAccount, IMessage} from '../data-model';
 import {ChatService} from '../services/app.chat-service';
 import {MatDialog} from "@angular/material";
 import {AddChatModalComponent} from "./add-chat-modal/add-chat-modal.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-chat',
@@ -25,10 +26,11 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   constructor(private service: ChatService,
               private fb: FormBuilder,
+              private router: Router,
               public dialog: MatDialog,) {
     const account: IAccount = JSON.parse(localStorage.getItem('account'));
     if (account == null) {
-      window.location.href = '/login';
+      this.router.navigate(['login'])
     }
     this.account = account;
 

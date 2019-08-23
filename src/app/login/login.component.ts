@@ -1,6 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl} from '@angular/forms';
 import {AccountService} from '../services/app.account-service';
+import {Store} from "@ngrx/store";
+import {IUserState} from "../store/user.reducer";
+import {Router} from "@angular/router";
+import {LogInUser} from "../store/user.action";
 
 @Component({
   selector: 'app-login',
@@ -16,15 +20,18 @@ export class LoginComponent implements OnInit, OnDestroy {
   error = '';
 
   constructor(private fb: FormBuilder,
-              private service: AccountService) {
+              private service: AccountService,
+              private store: Store<IUserState>,
+              private router: Router) {
   }
 
   ngOnInit() {
     localStorage.removeItem('account');
     this.service.subscribe({
       next: value => {
+        this.store.dispatch(new LogInUser(value));
         localStorage.setItem('account', JSON.stringify(value));
-        window.location.assign('user');
+        this.router.navigate(['/user']);
       },
       error: err => {
         this.error = err;

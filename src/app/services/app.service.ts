@@ -1,10 +1,17 @@
 import * as SockJS from 'sockjs-client';
 import {Stomp} from "@stomp/stompjs";
+import {select, Store} from "@ngrx/store";
+import {Injector} from "@angular/core";
 
 export class Service {
   protected stompClient;
+  private serverPort = 8080;
 
-  constructor(private serverPort: number) {
+  constructor(injector: Injector) {
+    const store = injector.get(Store);
+    store.pipe(select('config'), select('serverPort')).subscribe(port => {
+      this.serverPort = port;
+    })
   }
 
   protected connect(callback, username?) {

@@ -10,13 +10,18 @@ import {AppComponent} from './app.component';
 import {ChatComponent} from './chat/chat.component';
 import {LoginComponent} from './login/login.component';
 import {SignUpComponent} from './sign-up/sign-up.component';
-import {SERVER_PORT} from "./app.configurations";
 import {AddChatModalComponent} from './chat/add-chat-modal/add-chat-modal.component';
 import { MatDialogModule, MatFormFieldModule} from "@angular/material";
+import {environment} from "../environments/environment";
+import {StoreModule} from "@ngrx/store";
+import {StoreDevtoolsModule} from "@ngrx/store-devtools";
+import * as user from "./store/user.reducer";
+import {AuthGuard} from "./auth-guard.service";
+import * as config from './app.configurations';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
-  {path: 'user', component: ChatComponent},
+  {path: 'user', component: ChatComponent, canActivate: [AuthGuard]},
   {path: 'sign', component: SignUpComponent},
   {path: '', component: LoginComponent},
 ];
@@ -41,9 +46,15 @@ const appRoutes: Routes = [
     MatDialogModule,
     FormsModule,
     MatFormFieldModule,
-  ],
-  providers: [
-    {provide: SERVER_PORT, useValue: SERVER_PORT},
+    StoreModule.forRoot({
+      user: user.reducer,
+      config: config.reducer,
+    }),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      name: 'Chat-Application',
+      logOnly: environment.production,
+    })
   ],
   entryComponents: [
     AddChatModalComponent,
