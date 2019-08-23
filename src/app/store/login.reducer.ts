@@ -7,7 +7,7 @@ export interface IClientState {
 }
 
 const initialClientState: IClientState = {
-  account: null,
+  account: null
 };
 
 export function reducer(state = initialClientState, action: LoginActions) {

@@ -8,8 +8,22 @@ import {Service} from "./app.service";
 })
 export class ChatService extends Service {
 
-  constructor(injector:Injector) {
+  constructor(injector: Injector) {
     super(injector);
+  }
+
+  isExistingAccount(observer: Observer<string>, username: string) {
+    super.connect(() => {
+      this.stompClient.subscribe('/user/chat/isExistingAccount', (response) => {
+         if (response.body.includes('NOT_FOUND')) {
+          const body = JSON.parse(response.body.replace('NOT_FOUND', 404));
+          observer.error(body.reason);
+        } else {
+          observer.next(response.body);
+        }
+      });
+      this.stompClient.send('/chatApp/isExistingAccount', {}, username);
+    });
   }
 
   subscribe(observer: Observer<IMessage>) {

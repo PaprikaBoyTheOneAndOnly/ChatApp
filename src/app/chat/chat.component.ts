@@ -3,7 +3,7 @@ import {FormBuilder, FormControl, Validators} from '@angular/forms';
 import {IAccount, IMessage} from '../data-model';
 import {ChatService} from '../services/app.chat-service';
 import {MatDialog} from "@angular/material";
-import {ChatModalComponent} from "./add-chat-modal/chat-modal.component";
+import {ChatModalComponent} from "./chat-modal/chat-modal.component";
 import {Router} from "@angular/router";
 import {getAccount, IClientState} from "../store/login.reducer";
 import {select, Store} from "@ngrx/store";

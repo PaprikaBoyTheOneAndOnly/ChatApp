@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.dispatch(new LogOutUser());
+   this.store.dispatch(new LogOutUser());
     this.service.subscribe({
       next: value => {
         this.store.dispatch(new LogInUser(value));

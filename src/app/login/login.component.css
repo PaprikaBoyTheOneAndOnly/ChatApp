@@ -9,7 +9,7 @@
 .container {
   width: 400px;
   box-shadow: rgba(0,0,0,0.3) 10px 10px;
-  background-color: #ededa6;
+  background-color: var(--col-beige);
 }
 
 .btn{
