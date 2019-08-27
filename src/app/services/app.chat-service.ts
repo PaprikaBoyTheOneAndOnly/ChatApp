@@ -1,6 +1,6 @@
 import {Inject, Injectable, Injector} from '@angular/core';
 import {Observer} from 'rxjs';
-import {IAccount, IMessage} from '../data-model';
+import {IAccount, IChat, IMessage} from '../data-model';
 import {Service} from "./app.service";
 
 @Injectable({
@@ -33,6 +33,7 @@ export class ChatService extends Service {
         if (body.code === '403') {
           observer.error(body.reason);
         } else {
+          let message: IMessage = body;
           observer.next(body);
         }
       });
@@ -43,6 +44,7 @@ export class ChatService extends Service {
         if (body.code === '403') {
           observer.error(body.reason);
         } else {
+          let chats: IChat = body;
           observer.next(body);
         }
       });

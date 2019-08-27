@@ -14,10 +14,10 @@
     <aside class="col-12 col-md-2 p-0">
       <nav class="navbar navbar-expand navbar-dark flex-md-column flex-row align-items-start">
         <div class="collapse navbar-collapse">
-          <ul class="flex-md-column flex-row navbar-nav w-100 justify-content-between">
+          <ul *ngIf="allChats" class="flex-md-column flex-row navbar-nav w-100 justify-content-between">
             <li *ngFor="let chat of allChats">
-              <div class="nav-item" (click)="showChat(Object.keys(chat)[0])">
-                {{ Object.keys(chat)}}
+              <div class="nav-item" (click)="showChat(chat.chatWith)">
+                {{ chat.chatWith}}
               </div>
             </li>
           </ul>
@@ -26,8 +26,8 @@
     </aside>
 
     <main class="col">
-      <div class="row chat-field">
-        <div *ngFor="let message of getCurrentChat()" [ngClass]="'col-md-12 message-' + wasSent(message)">
+      <div *ngIf="getCurrentChat()" class="row chat-field">
+        <div *ngFor="let message of getCurrentChat().messages" [ngClass]="'col-md-12 message-' + wasSent(message)">
           <div class="bubble">{{message.text}}</div>
           {{scrollToBottom()}}
         </div>

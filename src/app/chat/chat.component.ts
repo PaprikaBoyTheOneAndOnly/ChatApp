@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, Validators} from '@angular/forms';
-import {IAccount, IMessage} from '../data-model';
+import {IAccount, IChat, IMessage} from '../data-model';
 import {ChatService} from '../services/app.chat-service';
 import {MatDialog} from "@angular/material";
 import {ChatModalComponent} from "./chat-modal/chat-modal.component";
@@ -9,7 +9,6 @@ import {getAccount, IClientState} from "../store/login.reducer";
 import {select, Store} from "@ngrx/store";
 import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
-import * as _ from 'lodash';
 
 @Component({
   selector: 'app-chat',
@@ -19,10 +18,9 @@ import * as _ from 'lodash';
 export class ChatComponent implements OnInit, OnDestroy {
 
   currentChatUserTo = 'Username';
-  allChats: any[];
+  allChats: IChat[];
   account: IAccount;
   error: '';
-  Object = Object;
 
   messageForm = this.fb.group({
     text: new FormControl('', Validators.required)
@@ -42,13 +40,19 @@ export class ChatComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.service.subscribe({
       next: value => {
-        //initialization of all chats
-        if(value.to === undefined) {
-          this.allChats = parseChats(value);
-        } else {
-          //TODO receive and send chat
 
+        if ('text' in value) { //typeOf IMessage
+          this.allChats.forEach(chat => {
+            let chatWith = this.account.username === value.from ? value.to : value.from;
+            if (chat.chatWith === chatWith) {
+              chat.messages.push(value);
+            }
+          });
+        } else {
+          this.allChats = value;
+          console.log(this.getCurrentChat())
         }
+
         this.error = '';
       },
       error: err => {
@@ -91,7 +95,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   showChat(username: string) {
     this.allChats.forEach(chat => {
-      if (Object.keys(chat)[0] === username) {
+      if (chat.chatWith === username) {
         this.currentChatUserTo = username;
       }
     });
@@ -105,21 +109,23 @@ export class ChatComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(until$))
       .subscribe(result => {
         if (result && !this.isExistingChat(result)) {
-          const obj = new Object();
-          obj[result] = [];
-          this.allChats.push(obj)
+          this.allChats.push({
+            chatWith: result,
+            messages: [],
+          })
+        } else {
+          this.currentChatUserTo = result;
         }
         until$.complete();
       });
   }
 
-  getCurrentChat() {
-    let curChat = [];
+  getCurrentChat(): IChat {
+    let curChat;
     if (this.allChats) {
       this.allChats.forEach(chat => {
-        if (Object.keys(chat)[0] === this.currentChatUserTo) {
-
-          curChat.push(chat)
+        if (chat.chatWith === this.currentChatUserTo) {
+          curChat = chat;
         }
       })
     }
@@ -128,20 +134,6 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   private isExistingChat(username): boolean {
-    return this.allChats.find(chat => Object.keys(chat)[0] === username);
+    return !!this.allChats.find(chat => chat.chatWith === username);
   }
-}
-
-function parseChats(object: any) {
-  const keys = Object.keys(object);
-  const values = Object.values(object);
-  const chats = [];
-
-  for (let i = 0; i < keys.length; i++) {
-    const obj = new Object();
-    obj[keys[i]] = values[i];
-    chats.push(obj);
-  }
-
-  return chats;
 }

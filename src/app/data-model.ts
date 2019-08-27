@@ -1,8 +1,13 @@
+export interface IChat {
+  chatWith: string;
+  messages: IMessage[];
+}
+
 export interface IAccount {
   username: string;
   password: string;
   loggedIn: boolean;
-  chats: Object[];
+  chats: IChat[];
 }
 
 export interface IMessage {
