@@ -1,7 +1,7 @@
 import {Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {NgForm} from '@angular/forms';
-import {ChatService} from "../../services/app.chat-service";
+import {AccountService} from '../../services/app.account-service';
 
 @Component({
   selector: 'app-add-chat-modal',
@@ -12,7 +12,7 @@ export class ChatModalComponent {
   error: string;
 
   constructor(private dialogRef: MatDialogRef<ChatModalComponent>,
-              private service: ChatService,
+              private service: AccountService,
               @Inject(MAT_DIALOG_DATA) public data) {
   }
 
@@ -22,16 +22,16 @@ export class ChatModalComponent {
 
   addUser(usernameForm: NgForm) {
     if(usernameForm && usernameForm.valid) {
-      this.service.isExistingAccount({
-          next: value => {
-            this.dialogRef.close(value);
-          },
-          error: err => {
-            this.error = err;
-          },
-          complete: null
-        },
-        usernameForm.form.value.username);
+      const username = usernameForm.form.value.username;
+      this.service.isExistingAccount(username).subscribe(
+        response => {
+          if(response) {
+            this.dialogRef.close(username);
+          } else {
+            this.error = 'User not found!'
+          }
+        }
+      );
     }
   }
 }

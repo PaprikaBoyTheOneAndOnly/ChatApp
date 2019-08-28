@@ -1,5 +1,5 @@
-import {Action} from "@ngrx/store";
-import {IAccount} from "../data-model";
+import {Action} from '@ngrx/store';
+import {IAccount} from '../data-model';
 
 export enum LoginActionTypes {
   LOG_IN_USER = 'LOG_IN_USER',

@@ -1,40 +1,33 @@
-import {Inject, Injectable, Injector} from '@angular/core';
-import {Observer} from 'rxjs';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
 import {IAccount} from '../data-model';
-import {Service} from "./app.service";
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AccountService extends Service {
+export class AccountService {
 
-  constructor(injector: Injector) {
-    super(injector);
+  private baseUrl = '//localhost:8090/';
+  private httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': 'my-auth-token'
+    })
+  };
+
+  constructor(private http: HttpClient) {
   }
 
-  validateLogin(account: IAccount) {
-    this.stompClient.send('/chatApp/validate', {}, JSON.stringify(account));
+  isValidLogin(account: IAccount): Observable<IAccount> {
+    return this.http.post<IAccount>(`${this.baseUrl}isValidLogin`, account, this.httpOptions);
   }
 
-  createAccount(account: IAccount) {
-    this.stompClient.send('/chatApp/createAccount', {}, JSON.stringify(account));
+  createAccount(account: IAccount): Observable<IAccount> {
+    return this.http.post<IAccount>(`${this.baseUrl}createAccount`, account, this.httpOptions);
   }
 
-  subscribe(observer: Observer<IAccount>) {
-    super.connect(() => {
-      this.stompClient.subscribe('/user/login/setLogin', (response) => {
-        const body = JSON.parse(response.body.replace('FORBIDDEN', 403));
-
-        if (body.code === '403') {
-          observer.error(body.reason);
-        } else {
-          observer.next(body);
-        }
-      });
-    });
-  }
-
-  disconnect() {
-    this.stompClient.disconnect();
+  isExistingAccount(username: String): Observable<boolean> {
+      return this.http.get<boolean>(`${this.baseUrl}isExistingAccount?username=${username}`);
   }
 }

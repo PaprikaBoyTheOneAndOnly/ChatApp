@@ -1,6 +1,6 @@
-import {IAccount} from "../data-model";
-import {LoginActions, LoginActionTypes} from "./login.action";
-import {createFeatureSelector, createSelector} from "@ngrx/store";
+import {IAccount} from '../data-model';
+import {LoginActions, LoginActionTypes} from './login.action';
+import {createFeatureSelector, createSelector} from '@ngrx/store';
 
 export interface IClientState {
   account: IAccount,

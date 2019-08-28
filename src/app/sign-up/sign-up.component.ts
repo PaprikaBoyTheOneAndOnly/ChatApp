@@ -1,18 +1,17 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {FormBuilder, FormControl, Validators} from '@angular/forms';
 import {AccountService} from '../services/app.account-service';
-import {LogInUser} from "../store/login.action";
-import {IAccount} from "../data-model";
-import {IClientState} from "../store/login.reducer";
-import {Store} from "@ngrx/store";
-import {Router} from "@angular/router";
+import {LogInUser} from '../store/login.action';
+import {IClientState} from '../store/login.reducer';
+import {Store} from '@ngrx/store';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.css']
 })
-export class SignUpComponent implements OnInit, OnDestroy {
+export class SignUpComponent {
   signUpForm = this.fb.group(
     {
       username: new FormControl('', [
@@ -42,20 +41,6 @@ export class SignUpComponent implements OnInit, OnDestroy {
               private router: Router) {
   }
 
-  ngOnInit() {
-    this.service.subscribe({
-      next: response => {
-        this.store.dispatch(new LogInUser(response));
-        this.router.navigate(['/user']);
-      },
-      error: err => {
-        this.error.exists = err;
-      },
-      complete: () => {
-      }
-    });
-  }
-
   save() {
     this.error = {
       user: '',
@@ -80,7 +65,13 @@ export class SignUpComponent implements OnInit, OnDestroy {
         password: this.signUpForm.get('password').value,
         loggedIn: false,
         chats: null,
-      });
+      }).subscribe(
+        response => {
+          this.store.dispatch(new LogInUser(response));
+          this.router.navigate(['/user'])
+        }, error => {
+          this.error.exists = error.error.message;
+        });
     }
   }
 
@@ -93,10 +84,6 @@ export class SignUpComponent implements OnInit, OnDestroy {
     } else {
       this.error.rePass = '';
     }
-  }
-
-  ngOnDestroy() {
-    this.service.disconnect();
   }
 
   back() {

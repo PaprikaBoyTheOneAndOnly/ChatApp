@@ -16,7 +16,7 @@
         <div class="collapse navbar-collapse">
           <ul *ngIf="allChats" class="flex-md-column flex-row navbar-nav w-100 justify-content-between">
             <li *ngFor="let chat of allChats">
-              <div class="nav-item" (click)="showChat(chat.chatWith)">
+              <div class="nav-item" (click)="setCurrentChat(chat.chatWith)">
                 {{ chat.chatWith}}
               </div>
             </li>
@@ -43,7 +43,7 @@
                aria-describedby="basic-addon2"
                formControlName="text">
         <div class="input-group-append">
-          <button class="btn btn-secondary" type="button" (click)="sendMessage()">Send</button>
+          <button class="btn btn-secondary" type="button" (click)="sendMessage()" [disabled]="!this.currentChat">Send</button>
         </div>
       </div>
     </div>

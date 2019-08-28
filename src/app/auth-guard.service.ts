@@ -4,8 +4,8 @@ import {
   CanActivate
 } from '@angular/router';
 
-import {select, Store} from "@ngrx/store";
-import {getAccount, IClientState} from "./store/login.reducer";
+import {select, Store} from '@ngrx/store';
+import {getAccount, IClientState} from './store/login.reducer';
 
 @Injectable({
   providedIn: 'root',

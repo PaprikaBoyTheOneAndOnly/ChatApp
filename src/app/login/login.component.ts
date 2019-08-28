@@ -1,17 +1,17 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl} from '@angular/forms';
 import {AccountService} from '../services/app.account-service';
-import {Store} from "@ngrx/store";
-import {IClientState} from "../store/login.reducer";
-import {Router} from "@angular/router";
-import {LogInUser, LogOutUser} from "../store/login.action";
+import {Store} from '@ngrx/store';
+import {IClientState} from '../store/login.reducer';
+import {Router} from '@angular/router';
+import {LogInUser, LogOutUser} from '../store/login.action';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnInit {
   loginForm = this.fb.group(
     {
       username: new FormControl(''),
@@ -26,18 +26,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-   this.store.dispatch(new LogOutUser());
-    this.service.subscribe({
-      next: value => {
-        this.store.dispatch(new LogInUser(value));
-        this.router.navigate(['/user']);
-      },
-      error: err => {
-        this.error = err;
-      },
-      complete: () => {
-      },
-    });
+    this.store.dispatch(new LogOutUser());
   }
 
   onLoginClicked() {
@@ -46,7 +35,13 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     if (username && password) {
       this.error = '';
-      this.service.validateLogin({username, password, loggedIn: null, chats: null});
+      this.service.isValidLogin({username, password, loggedIn: null, chats: null}).subscribe(
+        response => {
+          this.store.dispatch(new LogInUser(response));
+          this.router.navigate(['/user']);
+        }, err => {
+          this.error = err.error.message;
+        });
     } else {
       this.error = 'Please fill all gaps';
     }
@@ -54,9 +49,5 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   signIn() {
     this.router.navigate(['/sign']);
-  }
-
-  ngOnDestroy() {
-    this.service.disconnect();
   }
 }

@@ -11,12 +11,12 @@ import {ChatComponent} from './chat/chat.component';
 import {LoginComponent} from './login/login.component';
 import {SignUpComponent} from './sign-up/sign-up.component';
 import {ChatModalComponent} from './chat/chat-modal/chat-modal.component';
-import { MatDialogModule, MatFormFieldModule} from "@angular/material";
-import {environment} from "../environments/environment";
-import {StoreModule} from "@ngrx/store";
-import {StoreDevtoolsModule} from "@ngrx/store-devtools";
-import * as login from "./store/login.reducer";
-import {AuthGuard} from "./auth-guard.service";
+import { MatDialogModule, MatFormFieldModule} from '@angular/material';
+import {environment} from '../environments/environment';
+import {StoreModule} from '@ngrx/store';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools';
+import * as login from './store/login.reducer';
+import {AuthGuard} from './auth-guard.service';
 import * as config from './app.configurations';
 
 const appRoutes: Routes = [

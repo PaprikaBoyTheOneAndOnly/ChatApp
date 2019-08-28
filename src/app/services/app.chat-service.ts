@@ -1,57 +1,50 @@
-import {Inject, Injectable, Injector} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Observer} from 'rxjs';
-import {IAccount, IChat, IMessage} from '../data-model';
-import {Service} from "./app.service";
+import {IAccount, IMessage} from '../data-model';
+import * as SockJS from 'sockjs-client';
+import {Stomp} from '@stomp/stompjs';
+import {select, Store} from '@ngrx/store';
+import {getServerPort} from '../app.configurations';
+import {getAccount} from '../store/login.reducer';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ChatService extends Service {
+export class ChatService {
 
-  constructor(injector: Injector) {
-    super(injector);
-  }
+  protected stompClient;
+  protected account: IAccount;
+  private serverPort: number;
 
-  isExistingAccount(observer: Observer<string>, username: string) {
-    super.connect(() => {
-      this.stompClient.subscribe('/user/chat/isExistingAccount', (response) => {
-         if (response.body.includes('NOT_FOUND')) {
-          const body = JSON.parse(response.body.replace('NOT_FOUND', 404));
-          observer.error(body.reason);
-        } else {
-          observer.next(response.body);
-        }
-      });
-      this.stompClient.send('/chatApp/isExistingAccount', {}, username);
+  constructor(private store: Store<any>) {
+    store.pipe(select(getServerPort)).subscribe(port => {
+      this.serverPort = port;
+    });
+    store.pipe(select(getAccount)).subscribe(account => {
+      this.account = account;
     });
   }
 
   subscribe(observer: Observer<IMessage>) {
-    super.connect(() => {
+    const username = this.account == undefined ? '' : `?username=${this.account.username}`;
+
+    const socket = new SockJS('http://localhost:' + this.serverPort + '/my-chat-app' + username);
+    this.stompClient = Stomp.over(socket);
+    this.stompClient.debug = () => {
+    };
+
+    this.stompClient.connect({}, () => {
       this.stompClient.subscribe('/user/chat/receiveMessage', (response) => {
         const body = JSON.parse(response.body.replace('FORBIDDEN', 403));
-        if (body.code === '403') {
-          observer.error(body.reason);
-        } else {
-          let message: IMessage = body;
-          observer.next(body);
-        }
-      });
-
-      this.stompClient.subscribe('/user/chat/receiveChats', (response) => {
-        const body = JSON.parse(response.body.replace('FORBIDDEN', 403));
 
         if (body.code === '403') {
           observer.error(body.reason);
         } else {
-          let chats: IChat = body;
           observer.next(body);
         }
       });
-      this.stompClient.send('/chatApp/getMessages', {}, JSON.stringify(this.account));
-    }, this.account.username);
+    });
   }
-
 
   sendMessage(message: IMessage) {
     this.stompClient.send('/chatApp/sendMessage', {}, JSON.stringify(message));
@@ -62,6 +55,4 @@ export class ChatService extends Service {
       this.stompClient.disconnect();
     }
   }
-
-
 }
