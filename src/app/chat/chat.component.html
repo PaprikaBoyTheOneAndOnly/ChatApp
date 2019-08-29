@@ -10,13 +10,14 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="row chat-section">
     <aside class="col-12 col-md-2 p-0">
       <nav class="navbar navbar-expand navbar-dark flex-md-column flex-row align-items-start">
         <div class="collapse navbar-collapse">
           <ul *ngIf="allChats" class="flex-md-column flex-row navbar-nav w-100 justify-content-between">
-            <li *ngFor="let chat of allChats">
-              <div class="nav-item" (click)="setCurrentChat(chat.chatWith)">
+            <li *ngFor="let chat of allChats; let i = index">
+              <div [ngClass]="'nav-item'+getPosition(i)+getSelected(chat)"
+                   (click)="setCurrentChat(chat.chatWith)">
                 {{ chat.chatWith}}
               </div>
             </li>
@@ -43,7 +44,9 @@
                aria-describedby="basic-addon2"
                formControlName="text">
         <div class="input-group-append">
-          <button class="btn btn-secondary" type="button" (click)="sendMessage()" [disabled]="!this.currentChat">Send</button>
+          <button class="btn btn-secondary" type="button"
+                  (click)="sendMessage()"
+                  [disabled]="!this.currentChat || this.isModalOpen">Send</button>
         </div>
       </div>
     </div>

@@ -1,11 +1,12 @@
 import {Injectable} from '@angular/core';
-import {Observer} from 'rxjs';
-import {IAccount, IMessage} from '../data-model';
+import {Observable, Observer} from 'rxjs';
+import {IAccount, IChat, IMessage} from '../data-model';
 import * as SockJS from 'sockjs-client';
 import {Stomp} from '@stomp/stompjs';
 import {select, Store} from '@ngrx/store';
-import {getServerPort} from '../app.configurations';
+import {getServerPort} from '../store/app.configurations';
 import {getAccount} from '../store/login.reducer';
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ export class ChatService {
   protected account: IAccount;
   private serverPort: number;
 
-  constructor(private store: Store<any>) {
+  constructor(private store: Store<any>,
+              private httpClient: HttpClient) {
     store.pipe(select(getServerPort)).subscribe(port => {
       this.serverPort = port;
     });
@@ -44,6 +46,10 @@ export class ChatService {
         }
       });
     });
+  }
+
+  loadAllChats(username: string): Observable<IChat[]> {
+    return this.httpClient.get<IChat[]>(`//localhost:${this.serverPort}/loadChats?username=${username}`);
   }
 
   sendMessage(message: IMessage) {

@@ -17,7 +17,7 @@ import {StoreModule} from '@ngrx/store';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import * as login from './store/login.reducer';
 import {AuthGuard} from './auth-guard.service';
-import * as config from './app.configurations';
+import * as config from './store/app.configurations';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},

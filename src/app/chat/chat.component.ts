@@ -9,6 +9,7 @@ import {getAccount, IClientState} from '../store/login.reducer';
 import {select, Store} from '@ngrx/store';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {LogOutUser} from "../store/login.action";
 
 @Component({
   selector: 'app-chat',
@@ -20,7 +21,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   allChats: IChat[];
   account: IAccount;
   error: '';
-
+  isModalOpen = false;
   messageForm = this.fb.group({
     text: new FormControl('', Validators.required)
   });
@@ -35,20 +36,37 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.store.pipe(takeUntil(this.destroyed$), select(getAccount))
       .subscribe(account => {
         this.account = account;
-        this.allChats = this.account.chats;
-        this.setCurrentChat(account.username);
+        if (account) {
+          const sub$ = new Subject();
+          this.service.loadAllChats(account.username)
+            .pipe(takeUntil(sub$))
+            .subscribe(chats => {
+              this.allChats = chats;
+              this.setCurrentChat(account.username);
+              sub$.complete();
+            });
+        }
       });
   }
 
   ngOnInit() {
     this.service.subscribe({
       next: message => {
+        let chatWith = this.account.username === message.from ? message.to : message.from;
+        var isExistingChat = false;
         this.allChats.forEach(chat => {
-          let chatWith = this.account.username === message.from ? message.to : message.from;
           if (chat.chatWith === chatWith) {
             chat.messages.push(message);
+            isExistingChat = true;
           }
         });
+
+        if (!isExistingChat) {
+          this.allChats.push({
+            chatWith,
+            messages: [message],
+          })
+        }
 
         this.error = '';
       },
@@ -87,26 +105,27 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   addChat() {
     const until$ = new Subject();
-    until$.complete();
+    this.isModalOpen = true;
     this.dialog.open(ChatModalComponent, {data: {}})
       .afterClosed()
       .pipe(takeUntil(until$))
       .subscribe(result => {
-        if (result) {
-          if (!this.isExistingChat(result)) {
-            const chat: IChat = {
-              chatWith: result,
-              messages: [],
-            };
-            this.allChats.push(chat);
-            this.currentChat = chat;
-          } else {
+          if (result) {
+            if (!this.isExistingChat(result)) {
+              const chat: IChat = {
+                chatWith: result,
+                messages: [],
+              };
+              this.allChats.push(chat);
+            }
             this.setCurrentChat(result);
           }
-        }
 
-        until$.complete();
-      });
+          until$.complete();
+        }, err => null,
+        () => {
+        this.isModalOpen = false;
+        });
   }
 
   setCurrentChat(username: string) {
@@ -124,12 +143,24 @@ export class ChatComponent implements OnInit, OnDestroy {
     return this.currentChat;
   }
 
-  ngOnDestroy() {
-    this.service.disconnect();
-    this.destroyed$.next();
-  }
-
   private isExistingChat(username): boolean {
     return !!this.allChats.find(chat => chat.chatWith === username);
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.complete();
+    this.store.dispatch(new LogOutUser());
+    this.service.disconnect();
+  }
+
+  getSelected(chat: IChat): string {
+    if(!this.currentChat) {
+      return '';
+    }
+    return chat.chatWith === this.currentChat.chatWith? ' current-chat': '';
+  }
+
+  getPosition(i: number):string {
+    return i === 0? ' nav-item-top': i === this.allChats.length - 1? ' nav-item-bottom': '';
   }
 }

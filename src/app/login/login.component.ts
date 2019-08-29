@@ -2,9 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl} from '@angular/forms';
 import {AccountService} from '../services/app.account-service';
 import {Store} from '@ngrx/store';
-import {IClientState} from '../store/login.reducer';
+import {getAccount, IClientState} from '../store/login.reducer';
 import {Router} from '@angular/router';
 import {LogInUser, LogOutUser} from '../store/login.action';
+import {takeUntil} from "rxjs/operators";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-login',
@@ -23,10 +25,19 @@ export class LoginComponent implements OnInit {
               private service: AccountService,
               private store: Store<IClientState>,
               private router: Router) {
+    let sub = new Subject();
+    this.store.select(getAccount)
+      .pipe(takeUntil(sub))
+      .subscribe(account => {
+        if (account) {
+          this.router.navigate(['/user']);
+          sub.complete();
+        }
+      });
   }
 
   ngOnInit() {
-    this.store.dispatch(new LogOutUser());
+    // this.store.dispatch(new LogOutUser());
   }
 
   onLoginClicked() {

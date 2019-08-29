@@ -1,7 +1,15 @@
 body{
   background-color: #33ad5c!important;
+  height: 100%;
+  overflow: hidden;
 }
 
 :root {
   --col-beige: #ededa6;
+  --col-light-beige: #EFEFBE;
+  --col-dark-beige: #D9D99B;
+}
+
+html {
+  height: 100%;
 }
