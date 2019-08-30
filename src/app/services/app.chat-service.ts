@@ -6,7 +6,7 @@ import {Stomp} from '@stomp/stompjs';
 import {select, Store} from '@ngrx/store';
 import {getServerPort} from '../store/app.configurations';
 import {getAccount} from '../store/login.reducer';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'

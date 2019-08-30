@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {IAccount} from '../data-model';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {select, Store} from "@ngrx/store";
-import {getServerPort} from "../store/app.configurations";
+import {select, Store} from '@ngrx/store';
+import {getServerPort} from '../store/app.configurations';
 
 @Injectable({
   providedIn: 'root'

@@ -1,1 +1,9 @@
-<router-outlet></router-outlet>
+<div class="container" *ngIf="waitAndLoad">
+  <div class="row">
+    <div class="col-12">
+      <app-loading  [takeUntil]="stopLoading"></app-loading>
+    </div>
+  </div>
+</div>
+<app-error *ngIf="!waitAndLoad && !isServerResponding" [errorText]="'The service is currently unavailable!'"></app-error>
+<router-outlet *ngIf="isServerResponding && !waitAndLoad"></router-outlet>

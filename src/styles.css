@@ -1,13 +1,21 @@
 body{
-  background-color: #33ad5c!important;
+  background-color: var(--col-base-green)!important;
   height: 100%;
   overflow: hidden;
 }
 
 :root {
-  --col-beige: #ededa6;
+  --col-beige: #EDEDA6;
   --col-light-beige: #EFEFBE;
   --col-dark-beige: #D9D99B;
+
+  --col-darkest-green: #236F3D;
+  --col-darker-green: #2C874B;
+  --col-dark-green: #329654;
+  --col-base-green: #33AD5C;
+  --col-green: #38A75E;
+  --col-light-green: #3DB867;
+  --col-lightest-green: #41C970;
 }
 
 html {

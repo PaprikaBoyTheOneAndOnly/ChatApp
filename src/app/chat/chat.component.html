@@ -1,55 +1,53 @@
-<app-error *ngIf="!isValidWidth" [errorText]="'Your device does not support the adjustments!'"></app-error>
-<div *ngIf="isValidWidth" class="container card container-fluid" [formGroup]="messageForm">
-  <div class="row">
-    <div class="col-md-6">
-      <h1>Hello: '{{account.username}}'</h1>
+<app-error *ngIf="!isValidWidth" [errorText]="'We do not support your Device!'"></app-error>
+<div *ngIf="isValidWidth" class="container" fxLayout="column">
+  <header fxLayout="row" fxLayoutAlign="space-between">
+
+    <div ngbDropdown class="d-inline-block">
+      <h1 id="dropdownBasic1" ngbDropdownToggle>{{account.username}}</h1>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+        <p (click)="logout()">Logout</p>
+        <p>edit profile</p>
+      </div>
     </div>
-    <div class="col-md-6 add-field">
+
+    <div class="add-field">
       <div class="btn btn-primary btn-add" (click)="addChat()">
-       +
+        +
       </div>
     </div>
-  </div>
+  </header>
 
-  <div class="row chat-section">
-    <aside class="col-12 col-md-2 p-0">
-      <nav class="navbar navbar-expand navbar-dark flex-md-column flex-row align-items-start">
-        <div class="collapse navbar-collapse">
-          <ul *ngIf="allChats" class="flex-md-column flex-row navbar-nav w-100">
-            <li *ngFor="let chat of allChats; let i = index">
-              <div [ngClass]="'nav-item'+getPosition(i)+getSelected(chat)"
-                   (click)="setCurrentChat(chat.chatWith)">
-                {{ chat.chatWith}}
-              </div>
-            </li>
-          </ul>
-        </div>
-      </nav>
-    </aside>
+  <main fxLayout="row" fxLayoutAlign="space-between">
+    <nav>
+      <ul *ngIf="allChats" class="flex-md-column flex-row navbar-nav w-100">
+        <li *ngFor="let chat of allChats; let i = index">
+          <div [ngClass]="'nav-item'+getSelected(chat)"
+               (click)="setCurrentChat(chat.chatWith)">
+            {{ chat.chatWith}}
+          </div>
+        </li>
+      </ul>
+    </nav>
 
-    <main class="col">
-      <div *ngIf="getCurrentChat()" class="row chat-field">
-        <div *ngFor="let message of getCurrentChat().messages" [ngClass]="'col-md-12 message-' + wasSent(message)">
-          <div class="bubble">{{message.text}}</div>
-          {{scrollToBottom()}}
+    <div class="chat-section" fxLayout="column" fxLayoutAlign="space-between">
+      <div class="chat-field">
+        <div *ngIf="getCurrentChat()" class="message-field">
+          <div *ngFor="let message of getCurrentChat().messages" [ngClass]="'message-' + wasSent(message)">
+            <div class="bubble">{{message.text}}</div>
+            {{scrollToBottom()}}
+          </div>
         </div>
       </div>
-    </main>
-  </div>
 
-  <div class="row">
-    <div class="col-md-12">
-      <div class="input-group mb-3">
-        <input type="text" class="form-control"
-               placeholder="Your text..."
-               aria-describedby="basic-addon2"
-               formControlName="text">
+      <form class="input-group mb-3" (ngSubmit)="sendMessage(chatForm)" #chatForm="ngForm">
+        <input type="text" class="form-control" ngModel required
+               name="message" #message="ngModel"
+               placeholder="Your text..." aria-describedby="basic-addon2">
         <div class="input-group-append">
-          <button class="btn btn-secondary" type="button"
-                  (click)="sendMessage()"
-                  [disabled]="!this.currentChat || this.isModalOpen">Send</button>
+          <button class="btn btn-secondary" type="submit" [disabled]="!this.currentChat || this.isModalOpen">Send
+          </button>
         </div>
-      </div>
+      </form>
     </div>
-  </div>
+  </main>
 </div>

@@ -19,6 +19,9 @@ import * as login from './store/login.reducer';
 import {AuthGuard} from './auth-guard.service';
 import * as config from './store/app.configurations';
 import { ErrorComponent } from './error/error.component';
+import { LoadingComponent } from './loading/loading.component';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -35,12 +38,14 @@ const appRoutes: Routes = [
     SignUpComponent,
     ChatModalComponent,
     ErrorComponent,
+    LoadingComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    FlexLayoutModule,
     DragDropModule,
     RouterModule.forRoot(
       appRoutes,
@@ -56,7 +61,8 @@ const appRoutes: Routes = [
       maxAge: 25,
       name: 'Chat-Application',
       logOnly: environment.production,
-    })
+    }),
+    NgbModule
   ],
   entryComponents: [
     ChatModalComponent,

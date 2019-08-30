@@ -2,46 +2,57 @@
   box-shadow: rgba(0, 0, 0, 0.3) 10px 10px;
   background-color: var(--col-beige);
   height: 85vh;
-  top: 5vh;
-  margin-bottom: 60px;
+  margin-top: 15vh;
 }
 
-@media screen and (max-width: 600px) {
-  .container {
-    top: 0;
-    height: 100vh;
-  }
+main {
+  height: 100%;
 }
 
-
-.chat-section {
-  height: 80%;
-  margin-top: 20px;
+/*head*/
+h1 {
+  cursor: pointer;
 }
 
-aside {
-  border: 1px solid black;
-  border-radius: 30px;
-  background-color: var(--col-light-beige);
-  margin: 20px;
-  height: 90%;
-  overflow: hidden;
-  position: relative;
+h1:hover {
+  color: #0069d9;
+;
 }
 
-nav {
-  text-align: center;
+.btn-add {
   padding: 0;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: -17px;
-  overflow-y: scroll;
-  position: absolute;
+  border: 0;
+  height: 40px;
+  width: 40px;
+  font-size: 25px;
+  font-weight: bolder;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.add-field {
+  text-align: right;
+}
+
+/*--head--*/
+
+/*Navigation*/
+nav {
+  width: 25%;
+  height: 73vh;
+  margin: 2vh;
+  border: 1px solid;
+  overflow: hidden;
+  background-color: var(--col-light-beige);
 }
 
 ul {
+  width: 100%;
   height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding-right: 17px;
+  box-sizing: content-box;
 }
 
 li {
@@ -49,36 +60,47 @@ li {
 }
 
 .nav-item {
+  text-align: center;
   vertical-align: middle;
   height: 50px;
   padding: auto;
+  width: 110%;
   border-bottom: 1px solid black;
+  cursor: pointer;
 }
 
 .nav-item:hover {
   background-color: var(--col-dark-beige);
 }
 
-.nav-item-top {
-  border-top-left-radius: 30px;
-  border-top-right-radius: 30px;
-}
-
-.nav-item-bottom {
-  border-bottom-left-radius: 30px;
-  border-bottom-right-radius: 30px;
-}
-
 .current-chat {
   background-color: var(--col-dark-beige);
 }
 
-.collapse {
+/*--navigation--*/
+
+/*chat*/
+.chat-section {
+  margin: 2vh;
+  height: 73vh;
   width: 100%;
 }
 
-.input-group {
-  margin-top: 10px;
+.chat-field {
+  border: 1px solid;
+  overflow: hidden;
+  right: -17px;
+  width: 100%;
+  height: 100%;
+}
+
+.message-field {
+  height: 100%;
+  width: 102%;
+  overflow-y: scroll;
+  padding-right: 17px;
+  box-sizing: content-box;
+  background-color: var(--col-light-beige);
 }
 
 .bubble {
@@ -102,35 +124,8 @@ li {
   background-color: #a6b6ed;
 }
 
-main {
-  overflow: hidden;
-  position: relative;
-  height: 90%;
-  margin: 20px;
-  border: 1px solid black;
-  border-radius: 20px;
+.input-group {
+  margin-top: 4vh;
 }
 
-.chat-field {
-  position: absolute;
-  height: 100%;
-  display: block;
-  overflow-y: auto;
-  right: -17px;
-  width: 105%;
-  border: 10px solid var(--col-beige);
-}
-
-.btn-add {
-  padding: 0;
-  border: 0;
-  height: 40px;
-  width: 40px;
-  font-size: 25px;
-  font-weight: bolder;
-  margin-top: 15px;
-}
-
-.add-field {
-  text-align: right;
-}
+/*--chat--*/

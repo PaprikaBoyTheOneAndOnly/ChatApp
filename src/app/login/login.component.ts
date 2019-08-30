@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {FormBuilder, FormControl} from '@angular/forms';
 import {AccountService} from '../services/app.account-service';
 import {Store} from '@ngrx/store';
 import {getAccount, IClientState} from '../store/login.reducer';
 import {Router} from '@angular/router';
-import {LogInUser, LogOutUser} from '../store/login.action';
-import {takeUntil} from "rxjs/operators";
-import {Subject} from "rxjs";
+import {LogInUser} from '../store/login.action';
+import {takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -31,7 +31,7 @@ export class LoginComponent {
       .subscribe(account => {
         if (account) {
           this.router.navigate(['/user']);
-          sub.complete();
+          sub.next();
         }
       });
   }

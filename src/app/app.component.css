@@ -1,0 +1,15 @@
+.container {
+  box-shadow: rgba(0, 0, 0, 0.3) 10px 10px;
+  background-color: var(--col-beige);
+
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  top: 15%;
+  left: 25%;
+}
+
+.row {
+  text-align: center;
+  margin-top: 20%;
+}
