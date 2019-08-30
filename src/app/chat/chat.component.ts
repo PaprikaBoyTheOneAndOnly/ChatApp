@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, Validators} from '@angular/forms';
 import {IAccount, IChat, IMessage} from '../data-model';
 import {ChatService} from '../services/app.chat-service';
@@ -17,16 +17,17 @@ import {LogOutUser} from "../store/login.action";
   styleUrls: ['./chat.component.css']
 })
 export class ChatComponent implements OnInit, OnDestroy {
-  currentChat: IChat = null;
-  allChats: IChat[];
-  account: IAccount;
-  error: '';
-  isModalOpen = false;
-  messageForm = this.fb.group({
+  private currentChat: IChat = null;
+  private allChats: IChat[];
+  private account: IAccount;
+  private error: '';
+  private isModalOpen = false;
+  private messageForm = this.fb.group({
     text: new FormControl('', Validators.required)
   });
 
   private destroyed$ = new Subject();
+  private isValidWidth = window.innerWidth >= 770;
 
   constructor(private service: ChatService,
               private fb: FormBuilder,
@@ -45,6 +46,8 @@ export class ChatComponent implements OnInit, OnDestroy {
               this.setCurrentChat(account.username);
               sub$.complete();
             });
+        } else {
+
         }
       });
   }
@@ -162,5 +165,11 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   getPosition(i: number):string {
     return i === 0? ' nav-item-top': i === this.allChats.length - 1? ' nav-item-bottom': '';
+  }
+
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.isValidWidth = window.innerWidth >= 770;
   }
 }

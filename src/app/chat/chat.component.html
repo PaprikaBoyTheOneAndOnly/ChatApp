@@ -1,4 +1,5 @@
-<div class="container card container-fluid" [formGroup]="messageForm">
+<app-error *ngIf="!isValidWidth" [errorText]="'Your device does not support the adjustments!'"></app-error>
+<div *ngIf="isValidWidth" class="container card container-fluid" [formGroup]="messageForm">
   <div class="row">
     <div class="col-md-6">
       <h1>Hello: '{{account.username}}'</h1>
@@ -14,7 +15,7 @@
     <aside class="col-12 col-md-2 p-0">
       <nav class="navbar navbar-expand navbar-dark flex-md-column flex-row align-items-start">
         <div class="collapse navbar-collapse">
-          <ul *ngIf="allChats" class="flex-md-column flex-row navbar-nav w-100 justify-content-between">
+          <ul *ngIf="allChats" class="flex-md-column flex-row navbar-nav w-100">
             <li *ngFor="let chat of allChats; let i = index">
               <div [ngClass]="'nav-item'+getPosition(i)+getSelected(chat)"
                    (click)="setCurrentChat(chat.chatWith)">

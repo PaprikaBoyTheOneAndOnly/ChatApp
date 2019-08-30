@@ -13,7 +13,7 @@ import {Subject} from "rxjs";
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   loginForm = this.fb.group(
     {
       username: new FormControl(''),
@@ -34,10 +34,6 @@ export class LoginComponent implements OnInit {
           sub.complete();
         }
       });
-  }
-
-  ngOnInit() {
-    // this.store.dispatch(new LogOutUser());
   }
 
   onLoginClicked() {

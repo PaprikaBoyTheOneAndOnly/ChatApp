@@ -18,6 +18,7 @@ import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import * as login from './store/login.reducer';
 import {AuthGuard} from './auth-guard.service';
 import * as config from './store/app.configurations';
+import { ErrorComponent } from './error/error.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -33,6 +34,7 @@ const appRoutes: Routes = [
     ChatComponent,
     SignUpComponent,
     ChatModalComponent,
+    ErrorComponent,
   ],
   imports: [
     BrowserModule,
