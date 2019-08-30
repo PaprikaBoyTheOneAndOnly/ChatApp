@@ -96,9 +96,8 @@ li {
 
 .message-field {
   height: 100%;
-  width: 102%;
+  width: 102%!important;
   overflow-y: scroll;
-  padding-right: 17px;
   box-sizing: content-box;
   background-color: var(--col-light-beige);
 }
@@ -111,6 +110,13 @@ li {
   margin: 4px 10px;
 }
 
+/*
+.message {
+  height: 100%;
+  content vertically end
+}
+
+*/
 .message-0 {
   text-align: right;
   margin-right: 20px;
@@ -118,6 +124,7 @@ li {
 
 .message-0 .bubble {
   background-color: #a6cfed;
+  margin-right: -15px;
 }
 
 .message-1 .bubble {

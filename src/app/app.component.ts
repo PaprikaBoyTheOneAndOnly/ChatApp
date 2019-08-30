@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
   constructor(private httpClient: HttpClient,
               private store: Store<IConfigState>) {
   }
-
+// https://tburleson-layouts-demos.firebaseapp.com/#/docs
   ngOnInit(): void {
     let sub$ = new Subject();
     this.store.select(getServerPort)
