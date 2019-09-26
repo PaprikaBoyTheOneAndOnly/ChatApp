@@ -20,21 +20,23 @@ export class LoadingComponent implements OnInit {
   }
 
   ngOnInit() {
-    interval(10).pipe(takeUntil(this.takeUntil)).subscribe(x => {
-      this.rotation+=2;
-      if (this.rotation == 360) {
-        this.rotation = 0;
-      }
+    interval(10)
+      .pipe(takeUntil(this.takeUntil))
+      .subscribe(x => {
+        this.rotation += 2;
+        if (this.rotation == 360) {
+          this.rotation = 0;
+        }
 
-      if (this.growBigger) {
-        this.canvasSize += 1;
-      } else {
-        this.canvasSize -= 1;
-      }
-      if (this.canvasSize > 200 || this.canvasSize < 100) {
-        this.growBigger = !this.growBigger;
-      }
-    });
+        if (this.growBigger) {
+          this.canvasSize += 1;
+        } else {
+          this.canvasSize -= 1;
+        }
+        if (this.canvasSize > 200 || this.canvasSize < 100) {
+          this.growBigger = !this.growBigger;
+        }
+      });
   }
 
 }

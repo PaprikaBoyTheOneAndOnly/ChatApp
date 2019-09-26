@@ -1,7 +1,6 @@
 .container {
   box-shadow: rgba(0, 0, 0, 0.3) 10px 10px;
   background-color: var(--col-beige);
-  border-radius: 40px;
 
   position: absolute;
   width: 70%;

@@ -31,7 +31,7 @@
 
     <div class="chat-section" fxLayout="column" fxLayoutAlign="space-between">
       <div class="chat-field">
-        <div *ngIf="getCurrentChat()" class="message-field">
+        <div *ngIf="getCurrentChat()" class="message-field" fxLayout="column">
           <div *ngFor="let message of getCurrentChat().messages" [ngClass]="'message-' + wasSent(message)">
             <div class="bubble">{{message.text}}</div>
             {{scrollToBottom()}}
