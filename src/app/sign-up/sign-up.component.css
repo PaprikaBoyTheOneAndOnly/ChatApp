@@ -11,6 +11,7 @@
 .container {
   top: 10vh;
   width: 400px;
+  height: 50vh;
   box-shadow: rgba(0,0,0,0.3) 10px 10px;
   background-color: var(--col-beige);
 }

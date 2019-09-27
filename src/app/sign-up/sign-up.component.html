@@ -1,54 +1,54 @@
 <div class="container card head">
-  <div class="text-center head">
-    <h1>Sign-Up to Whatsappn't</h1>
-  </div>
-
-  <div class="card-body" [formGroup]="signUpForm">
-    <div class="row">
-      <div class="col-md-2"></div>
-      <div class="col-md-8">
-        <p>Username: </p>
-        <input type="text" class="form-control" formControlName="username">
-        <div *ngIf="error.user" class="error">Username must have at least 5 digits</div>
-      </div>
-      <div class="col-md-2"></div>
+    <div class="text-center head">
+      <h1>Sign-Up to Whatsappn't</h1>
     </div>
 
-    <div class="row">
-      <div class="col-md-2"></div>
-      <div class="col-md-8">
-        <p>Password: </p>
-        <input type="Password" class="form-control" formControlName="password" (ngModelChange)="passChanges('pass')">
-        <div *ngIf="error.pass" class="error">Password must have at least 8 digits</div>
+    <div class="card-body" [formGroup]="signUpForm">
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+          <p>Username: </p>
+          <input type="text" class="form-control" formControlName="username">
+          <div *ngIf="error.user" class="error">Username must have at least 5 digits</div>
+        </div>
+        <div class="col-md-2"></div>
       </div>
-      <div class="col-md-2"></div>
-    </div>
 
-    <div class="row">
-      <div class="col-md-2"></div>
-      <div class="col-md-8">
-        <p>Rewrite password: </p>
-        <input type="Password" class="form-control" formControlName="rePassword"
-               (ngModelChange)="passChanges('rePass')">
-        <div *ngIf="error.rePass" class="error">Passwords must be the same</div>
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+          <p>Password: </p>
+          <input type="Password" class="form-control" formControlName="password" (ngModelChange)="passChanges('pass')">
+          <div *ngIf="error.pass" class="error">Password must have at least 8 digits</div>
+        </div>
+        <div class="col-md-2"></div>
       </div>
-      <div class="col-md-2"></div>
-    </div>
 
-    <div class="row">
-      <div class="col-md-2"></div>
-      <div class="col-md-8">
-        <button class="btn btn-primary" (click)="back()">Back</button>
-        <button class="btn btn-primary" (click)="save()">Save</button>
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+          <p>Rewrite password: </p>
+          <input type="Password" class="form-control" formControlName="rePassword"
+                 (ngModelChange)="passChanges('rePass')">
+          <div *ngIf="error.rePass" class="error">Passwords must be the same</div>
+        </div>
+        <div class="col-md-2"></div>
       </div>
-      <div class="col-md-2"></div>
-    </div>
-    <div class="row" *ngIf="error.exists">
-      <div class="col-md-12">
-        <div *ngIf="error" class="alert alert-danger text-center" role="alert">{{error.exists}}</div>
+
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+          <button class="btn btn-primary" (click)="back()">Back</button>
+          <button class="btn btn-primary" (click)="save()">Save</button>
+        </div>
+        <div class="col-md-2"></div>
+      </div>
+      <div class="row" *ngIf="error.exists">
+        <div class="col-md-12">
+          <div *ngIf="error" class="alert alert-danger text-center" role="alert">{{error.exists}}</div>
+        </div>
       </div>
     </div>
-  </div>
 </div>
 
 

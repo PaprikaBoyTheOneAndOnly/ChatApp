@@ -1,0 +1,14 @@
+.myDropdown {
+  background-color: var(--col-light-beige);
+}
+
+.myDropdown > div {
+  margin-left: 10px;
+  margin-right: 10px;
+  padding:10px;
+}
+
+.myDropdown > div:hover {
+  cursor: pointer;
+  background-color: var(--col-dark-beige);
+}

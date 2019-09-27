@@ -22,6 +22,8 @@ import { ErrorComponent } from './error/error.component';
 import { LoadingComponent } from './loading/loading.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import { ChatDropdownComponent } from './chat/chat-dropdown/chat-dropdown.component';
+import { VideoComponent } from './chat/video/video.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -39,6 +41,8 @@ const appRoutes: Routes = [
     ChatModalComponent,
     ErrorComponent,
     LoadingComponent,
+    ChatDropdownComponent,
+    VideoComponent,
   ],
   imports: [
     BrowserModule,

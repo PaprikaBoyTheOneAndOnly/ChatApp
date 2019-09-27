@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {interval, Subject} from 'rxjs';
+import {interval, Observable, Observer, ReplaySubject, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 @Component({
@@ -13,7 +13,7 @@ export class LoadingComponent implements OnInit {
   private growBigger = true;
 
   @Input()
-  private takeUntil: Subject<any>;
+  private takeUntil: ReplaySubject<boolean>;
 
 
   constructor() {

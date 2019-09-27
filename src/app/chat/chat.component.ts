@@ -1,6 +1,6 @@
 import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {IAccount, IChat, IMessage} from '../data-model';
-import {Subject} from 'rxjs';
+import {ReplaySubject} from 'rxjs';
 import {ChatService} from '../services/app.chat-service';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
@@ -10,6 +10,7 @@ import {takeUntil} from 'rxjs/operators';
 import {ChatModalComponent} from './chat-modal/chat-modal.component';
 import {LogOutUser} from '../store/login.action';
 import {NgForm} from '@angular/forms';
+import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-chat',
@@ -23,24 +24,26 @@ export class ChatComponent implements OnInit, OnDestroy {
   private error: '';
   private isModalOpen = false;
 
-  private destroyed$ = new Subject();
+  private destroyed$ = new ReplaySubject<boolean>();
   private isValidWidth = window.innerWidth >= 770;
 
   constructor(private service: ChatService,
               private router: Router,
               private dialog: MatDialog,
-              private store: Store<IClientState>) {
+              private store: Store<IClientState>,
+              private sanitizer: DomSanitizer) {
     this.store.pipe(takeUntil(this.destroyed$), select(getAccount))
       .subscribe(account => {
         this.account = account;
         if (account) {
-          const sub$ = new Subject();
+          const sub$ = new ReplaySubject<boolean>();
           this.service.loadAllChats(account.username)
             .pipe(takeUntil(sub$))
             .subscribe(chats => {
               this.allChats = chats;
               this.setCurrentChat(account.username);
-              sub$.next();
+              sub$.next(true);
+              sub$.complete();
             });
         } else {
 
@@ -104,7 +107,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   addChat() {
-    const until$ = new Subject();
+    const until$ = new ReplaySubject<boolean>();
     this.isModalOpen = true;
     this.dialog.open(ChatModalComponent, {data: {}})
       .afterClosed()
@@ -121,7 +124,8 @@ export class ChatComponent implements OnInit, OnDestroy {
             this.setCurrentChat(result);
           }
 
-          until$.next();
+          until$.next(true);
+          until$.complete();
         }, err => null,
         () => {
           this.isModalOpen = false;
@@ -147,8 +151,14 @@ export class ChatComponent implements OnInit, OnDestroy {
     return !!this.allChats.find(chat => chat.chatWith === username);
   }
 
+  containsYoutube(url: string): boolean {
+   return new RegExp('http(?:s?):\\/\\/(?:www\\.)?youtu(?:be\\.com\\/watch\\?v=|\\.be\\/)([\\w\\-\\_]*)(&(amp;)?‌​[\\w\\?‌​=]*)?').test(url);
+
+  }
+
   ngOnDestroy() {
     this.destroyed$.next();
+    this.destroyed$.complete();
     this.store.dispatch(new LogOutUser());
     this.service.disconnect();
   }
@@ -158,15 +168,6 @@ export class ChatComponent implements OnInit, OnDestroy {
       return '';
     }
     return chat.chatWith === this.currentChat.chatWith ? ' current-chat' : '';
-  }
-
-  getPosition(i: number): string {
-    return i === 0 ? ' nav-item-top' : i === this.allChats.length - 1 ? ' nav-item-bottom' : '';
-  }
-
-
-  logout() {
-    this.router.navigate(['/login']);
   }
 
   @HostListener('window:resize', ['$event'])

@@ -2,13 +2,7 @@
 <div *ngIf="isValidWidth" class="container" fxLayout="column">
   <header fxLayout="row" fxLayoutAlign="space-between">
 
-    <div ngbDropdown class="d-inline-block">
-      <h1 id="dropdownBasic1" ngbDropdownToggle>{{account.username}}</h1>
-      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-        <p (click)="logout()">Logout</p>
-        <p>edit profile</p>
-      </div>
-    </div>
+    <app-chat-dropdown [account]="account"></app-chat-dropdown>
 
     <div class="add-field">
       <div class="btn btn-primary btn-add" (click)="addChat()">
@@ -34,6 +28,9 @@
         <div *ngIf="getCurrentChat()" class="message-field" fxLayout="column">
           <div *ngFor="let message of getCurrentChat().messages" [ngClass]="'message-' + wasSent(message)">
             <div class="bubble">{{message.text}}</div>
+            <div *ngIf="containsYoutube(message.text)">
+              <app-video [message]="message.text"></app-video>
+            </div>
             {{scrollToBottom()}}
           </div>
         </div>

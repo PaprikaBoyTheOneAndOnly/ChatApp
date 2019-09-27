@@ -1,0 +1,7 @@
+<div ngbDropdown class="d-inline-block">
+  <h1 id="dropdownBasic1" ngbDropdownToggle>{{account.username}}</h1>
+  <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="myDropdown">
+    <div (click)="logout()">Logout</div>
+    <div (click)="edit()">Edit profile</div>
+  </div>
+</div>
