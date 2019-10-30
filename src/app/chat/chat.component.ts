@@ -55,7 +55,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.service.subscribe({
       next: message => {
         let chatWith = this.account.username === message.from ? message.to : message.from;
-        var isExistingChat = false;
+        let isExistingChat = false;
         this.allChats.forEach(chat => {
           if (chat.chatWith === chatWith) {
             chat.messages.push(message);
@@ -173,5 +173,11 @@ export class ChatComponent implements OnInit, OnDestroy {
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.isValidWidth = window.innerWidth >= 770;
+  }
+
+  handleFileInput(files: FileList) {
+    console.log(files);
+    this.service.sendFile(files.item(0));
+    //this.fileToUpload = files.item(0);
   }
 }

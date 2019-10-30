@@ -5,7 +5,7 @@ import {CompatClient, Stomp} from '@stomp/stompjs';
 import {select, Store} from '@ngrx/store';
 import {getServerPort} from '../store/app.configurations';
 import {getAccount} from '../store/login.reducer';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import * as SockJS from "sockjs-client";
 import * as io from 'socket.io-client';
 import {environment} from "../../environments/environment";
@@ -55,6 +55,15 @@ export class ChatService {
 
   sendMessage(message: IMessage) {
     this.stompClient.send('/chatApp/sendMessage', {}, JSON.stringify(message));
+  }
+
+  sendFile(file: any) {
+    console.log('send')
+    const formData = new FormData();
+    formData.append('file', file);
+    this.httpClient.post(`//localhost:${this.serverPort}/sendFile`, formData).subscribe(s => {
+      console.log(s);
+    })
   }
 
   disconnect() {
