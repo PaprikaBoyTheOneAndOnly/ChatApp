@@ -52,6 +52,22 @@
                   "maximumError": "5mb"
                 }
               ]
+            },
+            "spring": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.spring.ts"
+                }
+              ]
+            },
+            "express": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.express.ts"
+                }
+              ]
             }
           }
         },
@@ -63,6 +79,12 @@
           "configurations": {
             "production": {
               "browserTarget": "ChatApp:build:production"
+            },
+            "spring": {
+              "browserTarget": "ChatApp:build:spring"
+            },
+            "express": {
+              "browserTarget": "ChatApp:build:express"
             }
           }
         },

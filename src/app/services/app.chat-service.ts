@@ -8,6 +8,7 @@ import {getAccount} from '../store/login.reducer';
 import {HttpClient} from '@angular/common/http';
 import * as SockJS from "sockjs-client";
 import * as io from 'socket.io-client';
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -27,13 +28,12 @@ export class ChatService {
       this.account = account;
     });
   }
-
+  // View | Appearance | Toolbar.
   subscribe(observer: Observer<IMessage>) {
     const username = this.account == undefined ? '' : `?username=${this.account.username}`;
-    // @ts-ignore
-    this.stompClient = process.env.SERVER_ENV == 'spring' ?
+    this.stompClient = environment.serverEnv == 'spring' ?
       Stomp.over(new SockJS('http://localhost:' + this.serverPort + '/my-chat-app' + username)) :
-      new CoverClient(io('http://localhost:8999'), this.account.username);
+      new CoverClient(io('http://localhost:'+ this.serverPort), this.account.username);
     this.stompClient.debug = () => {
     };
 

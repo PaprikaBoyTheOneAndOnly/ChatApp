@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "cross-env SERVER_ENV=\"spring\" ng serve",
-    "start-spring": "npm start",
-    "start-express": "cross-env SERVER_ENV=\"express\" ng serve",
+    "start": "ng serve",
+    "start:spring": "ng serve --configuration=spring",
+    "start:express": "ng serve --configuration=express",
     "build": "ng build",
     "pretest": "ng lint --fix",
     "test": "ng test",
