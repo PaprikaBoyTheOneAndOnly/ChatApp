@@ -180,4 +180,15 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.service.sendFile(files.item(0));
     //this.fileToUpload = files.item(0);
   }
+
+  downloadFile() {
+    this.service.downloadFile({
+      load: doc => {
+        console.log(doc.file.length)
+        var blob = new Blob([doc.file], {type: "application/pdf"});
+        var objectUrl = URL.createObjectURL(blob);
+        console.log('set img');
+         window.open(objectUrl);
+    }});
+  }
 }

@@ -66,6 +66,13 @@ export class ChatService {
     })
   }
 
+  downloadFile(lol) {
+    console.log('download');
+    this.httpClient.get(`//localhost:${this.serverPort}/downloadFile`).subscribe( file => {
+      lol.load(file);
+    })
+  }
+
   disconnect() {
     if (this.stompClient) {
       this.stompClient.disconnect();
