@@ -24,6 +24,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { ChatDropdownComponent } from './chat/chat-dropdown/chat-dropdown.component';
 import { VideoComponent } from './chat/video/video.component';
+import { UploadFileModalComponent } from './chat/upload-file-modal/upload-file-modal.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -43,6 +44,7 @@ const appRoutes: Routes = [
     LoadingComponent,
     ChatDropdownComponent,
     VideoComponent,
+    UploadFileModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -70,6 +72,7 @@ const appRoutes: Routes = [
   ],
   entryComponents: [
     ChatModalComponent,
+    UploadFileModalComponent,
   ],
   bootstrap: [AppComponent]
 })

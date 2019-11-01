@@ -1,0 +1,25 @@
+<div class="modal-container">
+  <div class="modal-content">
+    <div class="row">
+      <div class="col-md-10">
+        <h1>Upload File</h1>
+      </div>
+      <div class="col-md-2 close" (click)="close()">
+        X
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="input-group">
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="inputGroupFile01"
+                   aria-describedby="inputGroupFileAddon01" (change)="handleFileInput($event.target.files)">
+            <label class="custom-file-label"
+                   for="inputGroupFile01">{{ fileToUpload ? fileToUpload.name : 'Choose file'}}</label>
+          </div>
+        </div>
+        <button class="btn btn-secondary" (click)="uploadFile()">Upload File</button>
+      </div>
+    </div>
+  </div>
+</div>

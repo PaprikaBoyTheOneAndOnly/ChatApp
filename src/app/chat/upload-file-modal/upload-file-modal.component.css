@@ -1,0 +1,16 @@
+h1 {
+  font-size: 25px;
+  text-decoration: underline;
+}
+
+button {
+  margin-top: 10px;
+}
+
+.input-group {
+  margin-top: 10px;
+}
+
+input:hover {
+  cursor: pointer;
+}

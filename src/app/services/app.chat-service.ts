@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Observable, Observer} from 'rxjs';
-import {IAccount, IChat, IMessage} from '../data-model';
+import {IAccount, IChat, IFile, IMessage} from '../data-model';
 import {CompatClient, Stomp} from '@stomp/stompjs';
 import {select, Store} from '@ngrx/store';
 import {getServerPort} from '../store/app.configurations';
 import {getAccount} from '../store/login.reducer';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import * as SockJS from "sockjs-client";
 import * as io from 'socket.io-client';
 import {environment} from "../../environments/environment";
@@ -15,14 +15,16 @@ import {environment} from "../../environments/environment";
 })
 export class ChatService {
 
-  protected stompClient;
+  protected stompClient: CompatClient | CoverClient;
   protected account: IAccount;
   private serverPort: number;
+  private baseUrl: string;
 
   constructor(private store: Store<any>,
               private httpClient: HttpClient) {
     store.pipe(select(getServerPort)).subscribe(port => {
       this.serverPort = port;
+      this.baseUrl = '//localhost:' + this.serverPort;
     });
     store.pipe(select(getAccount)).subscribe(account => {
       this.account = account;
@@ -32,8 +34,8 @@ export class ChatService {
   subscribe(observer: Observer<IMessage>) {
     const username = this.account == undefined ? '' : `?username=${this.account.username}`;
     this.stompClient = environment.serverEnv == 'spring' ?
-      Stomp.over(new SockJS('http://localhost:' + this.serverPort + '/my-chat-app' + username)) :
-      new CoverClient(io('http://localhost:'+ this.serverPort), this.account.username);
+      Stomp.over(new SockJS('http:' +this.baseUrl + '/my-chat-app' + username)) :
+      new CoverClient(io('http:'+this.baseUrl), this.account.username);
     this.stompClient.debug = () => {
     };
 
@@ -50,25 +52,27 @@ export class ChatService {
   }
 
   loadAllChats(username: string): Observable<IChat[]> {
-    return this.httpClient.get<IChat[]>(`//localhost:${this.serverPort}/loadChats?username=${username}`);
+    return this.httpClient.get<IChat[]>(`${this.baseUrl}/loadChats?username=${username}`);
   }
 
   sendMessage(message: IMessage) {
     this.stompClient.send('/chatApp/sendMessage', {}, JSON.stringify(message));
   }
 
-  sendFile(file: any) {
-    console.log('send')
+  sendFile(file: any, from: string, to: string) {
     const formData = new FormData();
     formData.append('file', file);
-    this.httpClient.post(`//localhost:${this.serverPort}/sendFile`, formData).subscribe(s => {
+    formData.append('from', from);
+    formData.append('to', to);
+
+    this.httpClient.post(`${this.baseUrl}/sendFile`, formData).subscribe(s => {
       console.log(s);
     })
   }
 
   downloadFile(lol) {
     console.log('download');
-    this.httpClient.get(`//localhost:${this.serverPort}/downloadFile`).subscribe( file => {
+    this.httpClient.get(`${this.baseUrl}/downloadFile`).subscribe( file => {
       lol.load(file);
     })
   }
@@ -83,6 +87,10 @@ export class ChatService {
 class CoverClient {
   constructor(private socketIoClient, private username) {
   }
+
+  debug;
+  disconnect;
+
 
   send(destination: string, headers: any, body: any) {
     this.socketIoClient.emit(destination, body);

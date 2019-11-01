@@ -80,6 +80,11 @@ li {
 /*--navigation--*/
 
 /*chat*/
+
+.file-icon {
+  height: 20px;
+}
+
 .chat-section {
   margin: 2vh;
   height: 73vh;
@@ -110,13 +115,6 @@ li {
   margin: 4px 10px;
 }
 
-/*
-.message {
-  height: 100%;
-  content vertically end
-}
-
-*/
 .message-0 {
   text-align: right;
   margin-right: 20px;

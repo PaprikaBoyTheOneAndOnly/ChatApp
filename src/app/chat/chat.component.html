@@ -36,22 +36,21 @@
         </div>
       </div>
 
-      <form class="input-group mb-3" (ngSubmit)="sendMessage(chatForm)" #chatForm="ngForm">
+      <form *ngIf="this.currentChat" class="input-group mb-3" (ngSubmit)="sendMessage(chatForm)" #chatForm="ngForm">
+        <div class="input-group-prepend">
+          <button class="input-group-text" id="inputGroupPrepend" (click)="openUploadFile()">
+            <img class="file-icon" [src]="sanitizer.bypassSecurityTrustResourceUrl(icon.FILE)" />
+          </button>
+        </div>
         <input type="text" class="form-control" ngModel required
                name="message" #message="ngModel"
-               placeholder="Your text..." aria-describedby="basic-addon2">
+               placeholder="Your text..."
+               aria-describedby="basic-addon2">
         <div class="input-group-append">
-          <button class="btn btn-secondary" type="submit" [disabled]="!this.currentChat || this.isModalOpen">Send
+          <button class="btn btn-secondary" type="submit" [disabled]=" this.isModalOpen">Send
           </button>
         </div>
       </form>
-      <div class="form-group">
-        <label for="file">Choose File</label>
-        <input type="file"
-               id="file"
-               (change)="handleFileInput($event.target.files)">
-      </div>
-      <button (click)="downloadFile()"></button>
     </div>
   </main>
 </div>

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {getServerPort, IConfigState} from './store/app.configurations';
 import {Store} from '@ngrx/store';
-import {ReplaySubject, Subject} from 'rxjs';
+import {ReplaySubject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 @Component({
@@ -36,5 +36,4 @@ export class AppComponent implements OnInit {
         });
       });
   }
-
 }

@@ -13,9 +13,7 @@ export class VideoComponent implements OnInit {
 
   private url: SafeValue;
 
-  constructor(private sanitizer: DomSanitizer) {
-
-  }
+  constructor(private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;

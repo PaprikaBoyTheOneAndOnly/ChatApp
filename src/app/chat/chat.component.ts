@@ -1,5 +1,5 @@
 import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
-import {IAccount, IChat, IMessage} from '../data-model';
+import {IAccount, IChat, Icon, IFile, IMessage} from '../data-model';
 import {ReplaySubject} from 'rxjs';
 import {ChatService} from '../services/app.chat-service';
 import {Router} from '@angular/router';
@@ -10,7 +10,8 @@ import {takeUntil} from 'rxjs/operators';
 import {ChatModalComponent} from './chat-modal/chat-modal.component';
 import {LogOutUser} from '../store/login.action';
 import {NgForm} from '@angular/forms';
-import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
+import {DomSanitizer} from "@angular/platform-browser";
+import {UploadFileModalComponent} from "./upload-file-modal/upload-file-modal.component";
 
 @Component({
   selector: 'app-chat',
@@ -26,6 +27,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   private destroyed$ = new ReplaySubject<boolean>();
   private isValidWidth = window.innerWidth >= 770;
+  private icon = Icon;
 
   constructor(private service: ChatService,
               private router: Router,
@@ -152,8 +154,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   containsYoutube(url: string): boolean {
-   return new RegExp('http(?:s?):\\/\\/(?:www\\.)?youtu(?:be\\.com\\/watch\\?v=|\\.be\\/)([\\w\\-\\_]*)(&(amp;)?‌​[\\w\\?‌​=]*)?').test(url);
-
+    return new RegExp('http(?:s?):\\/\\/(?:www\\.)?youtu(?:be\\.com\\/watch\\?v=|\\.be\\/)([\\w\\-\\_]*)(&(amp;)?‌​[\\w\\?‌​=]*)?').test(url);
   }
 
   ngOnDestroy() {
@@ -175,12 +176,6 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.isValidWidth = window.innerWidth >= 770;
   }
 
-  handleFileInput(files: FileList) {
-    console.log(files);
-    this.service.sendFile(files.item(0));
-    //this.fileToUpload = files.item(0);
-  }
-
   downloadFile() {
     this.service.downloadFile({
       load: doc => {
@@ -188,7 +183,26 @@ export class ChatComponent implements OnInit, OnDestroy {
         var blob = new Blob([doc.file], {type: "application/pdf"});
         var objectUrl = URL.createObjectURL(blob);
         console.log('set img');
-         window.open(objectUrl);
-    }});
+        window.open(objectUrl);
+      }
+    });
+  }
+
+  openUploadFile() {
+    const until$ = new ReplaySubject<boolean>();
+    this.isModalOpen = true;
+    this.dialog.open(UploadFileModalComponent, {data: {}})
+      .afterClosed()
+      .pipe(takeUntil(until$))
+      .subscribe(result => {
+          if (result) {
+            this.service.sendFile(result, this.account.username, this.currentChat.chatWith);
+          }
+          until$.next(true);
+          until$.complete();
+        }, err => null,
+        () => {
+          this.isModalOpen = false;
+        });
   }
 }
