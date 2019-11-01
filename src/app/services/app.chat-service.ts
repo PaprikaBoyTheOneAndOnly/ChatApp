@@ -30,12 +30,13 @@ export class ChatService {
       this.account = account;
     });
   }
+
   // View | Appearance | Toolbar.
   subscribe(observer: Observer<IMessage>) {
     const username = this.account == undefined ? '' : `?username=${this.account.username}`;
     this.stompClient = environment.serverEnv == 'spring' ?
-      Stomp.over(new SockJS('http:' +this.baseUrl + '/my-chat-app' + username)) :
-      new CoverClient(io('http:'+this.baseUrl), this.account.username);
+      Stomp.over(new SockJS('http:' + this.baseUrl + '/my-chat-app' + username)) :
+      new CoverClient(io('http:' + this.baseUrl), this.account.username);
     this.stompClient.debug = () => {
     };
 
@@ -47,6 +48,10 @@ export class ChatService {
         } else {
           observer.next(body);
         }
+      });
+
+      this.stompClient.subscribe('/user/chat/receiveFile', asdf => {
+        console.log(JSON.parse(asdf.body));
       });
     });
   }
@@ -65,14 +70,16 @@ export class ChatService {
     formData.append('from', from);
     formData.append('to', to);
 
-    this.httpClient.post(`${this.baseUrl}/sendFile`, formData).subscribe(s => {
-      console.log(s);
+    this.httpClient.post(`${this.baseUrl}/sendFile`, formData).subscribe(() => {
+      console.log()
+    }, error => {
+      console.log(error.error)
     })
   }
 
   downloadFile(lol) {
     console.log('download');
-    this.httpClient.get(`${this.baseUrl}/downloadFile`).subscribe( file => {
+    this.httpClient.get(`${this.baseUrl}/downloadFile`).subscribe(file => {
       lol.load(file);
     })
   }
