@@ -1,6 +1,6 @@
 import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {IAccount, IChat, Icon, IFile, IMessage} from '../data-model';
-import {ReplaySubject} from 'rxjs';
+import {Observer, ReplaySubject} from 'rxjs';
 import {ChatService} from '../services/app.chat-service';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material';
@@ -29,6 +29,18 @@ export class ChatComponent implements OnInit, OnDestroy {
   private isValidWidth = window.innerWidth >= 770;
   private icon = Icon;
 
+  private messageObserver: Observer<IMessage> = {
+    next: message => this.handleReceiveMessage(message),
+    error: err => { this.error = err; },
+    complete: null,
+  };
+
+  private fileObserver: Observer<IFile> = {
+    next: file => this.handleReceiveFile(file),
+    error: err => { this.error = err; },
+    complete: null,
+  };
+
   constructor(private service: ChatService,
               private router: Router,
               private dialog: MatDialog,
@@ -54,32 +66,31 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.service.subscribe({
-      next: message => {
-        let chatWith = this.account.username === message.from ? message.to : message.from;
-        let isExistingChat = false;
-        this.allChats.forEach(chat => {
-          if (chat.chatWith === chatWith) {
-            chat.messages.push(message);
-            isExistingChat = true;
-          }
-        });
+    this.service.subscribe(this.messageObserver , this.fileObserver);
+  }
 
-        if (!isExistingChat) {
-          this.allChats.push({
-            chatWith,
-            messages: [message],
-          })
-        }
-
-        this.error = '';
-      },
-      error: err => {
-        this.error = err;
-      },
-      complete: () => {
+  handleReceiveMessage(message: IMessage) {
+    let chatWith = this.account.username === message.from ? message.to : message.from;
+    let isExistingChat = false;
+    this.allChats.forEach(chat => {
+      if (chat.chatWith === chatWith) {
+        chat.messages.push(message);
+        isExistingChat = true;
       }
     });
+
+    if (!isExistingChat) {
+      this.allChats.push({
+        chatWith,
+        messages: [message],
+      })
+    }
+
+    this.error = '';
+  }
+
+  handleReceiveFile(file: IFile) {
+
   }
 
   sendMessage(messageForm: NgForm) {
@@ -149,7 +160,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     return this.currentChat;
   }
 
-  private isExistingChat(username): boolean {
+  isExistingChat(username): boolean {
     return !!this.allChats.find(chat => chat.chatWith === username);
   }
 

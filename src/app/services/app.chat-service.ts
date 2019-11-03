@@ -24,7 +24,7 @@ export class ChatService {
               private httpClient: HttpClient) {
     store.pipe(select(getServerPort)).subscribe(port => {
       this.serverPort = port;
-      this.baseUrl = '//localhost:' + this.serverPort;
+      this.baseUrl = `//localhost:${port}`
     });
     store.pipe(select(getAccount)).subscribe(account => {
       this.account = account;
@@ -32,7 +32,7 @@ export class ChatService {
   }
 
   // View | Appearance | Toolbar.
-  subscribe(observer: Observer<IMessage>) {
+  subscribe(messageObserver: Observer<IMessage>, fileObserver: Observer<IFile>) {
     const username = this.account == undefined ? '' : `?username=${this.account.username}`;
     this.stompClient = environment.serverEnv == 'spring' ?
       Stomp.over(new SockJS('http:' + this.baseUrl + '/my-chat-app' + username)) :
@@ -44,14 +44,15 @@ export class ChatService {
       this.stompClient.subscribe('/user/chat/receiveMessage', (response) => {
         const body = JSON.parse(response.body.replace('FORBIDDEN', '403'));
         if (body.code === '403') {
-          observer.error(body.reason);
+          messageObserver.error(body.reason);
         } else {
-          observer.next(body);
+          messageObserver.next(body);
         }
       });
 
-      this.stompClient.subscribe('/user/chat/receiveFile', asdf => {
-        console.log(JSON.parse(asdf.body));
+      this.stompClient.subscribe('/user/chat/receiveFile', (response) => {
+        const body = JSON.parse(response.body);
+        console.log(body);
       });
     });
   }
@@ -94,11 +95,8 @@ export class ChatService {
 class CoverClient {
   constructor(private socketIoClient, private username) {
   }
-
   debug;
   disconnect;
-
-
   send(destination: string, headers: any, body: any) {
     this.socketIoClient.emit(destination, body);
   }
