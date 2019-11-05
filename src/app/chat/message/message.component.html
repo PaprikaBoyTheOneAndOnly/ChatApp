@@ -1,0 +1,6 @@
+<div [ngClass]="'message-' + wasSent()">
+  <div class="bubble">{{message.text}}</div>
+  <div *ngIf="containsYoutube()">
+    <app-video [message]="message.text"></app-video>
+  </div>
+</div>

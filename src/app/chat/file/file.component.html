@@ -1,0 +1,6 @@
+<div [ngClass]="'file-'+ wasSent()">
+  <div class="box" (click)="downloadFile()">
+    <img class="file-icon" [src]="sanitizer.bypassSecurityTrustResourceUrl(icon.FILE)" />
+    {{file.originalFilename}}
+  </div>
+</div>

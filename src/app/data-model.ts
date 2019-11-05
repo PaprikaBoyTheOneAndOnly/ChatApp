@@ -1,6 +1,6 @@
 export interface IChat {
   chatWith: string;
-  messages: IMessage[];
+  addressableList: IAddressable[];
 }
 
 export interface IAccount {
@@ -16,7 +16,8 @@ export interface IAddressable {
 }
 
 export interface IFile extends IAddressable {
-  file: any;
+  filename: string;
+  originalFilename: string;
 }
 export interface IMessage extends IAddressable {
   text: string;

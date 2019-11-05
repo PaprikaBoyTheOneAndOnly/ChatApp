@@ -1,5 +1,5 @@
 import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
-import {IAccount, IChat, Icon, IFile, IMessage} from '../data-model';
+import {IAccount, IAddressable, IChat, Icon, IFile, IMessage} from '../data-model';
 import {Observer, ReplaySubject} from 'rxjs';
 import {ChatService} from '../services/app.chat-service';
 import {Router} from '@angular/router';
@@ -55,7 +55,12 @@ export class ChatComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(sub$))
             .subscribe(chats => {
               this.allChats = chats;
-              this.setCurrentChat(account.username);
+              const file: IFile = {from:"Admin", to: "Username", filename: "asdfasf.pdf", originalFilename: "lol-Admin-Username.pdf"};
+              const file2: IFile = {from:"Username", to: "Admin", filename: "lol2.pdf", originalFilename: "lol2-Username-Admin.pdf"};
+
+              this.allChats[0].addressableList.push(file);
+              this.allChats[0].addressableList.push(file2);
+              this.setCurrentChat("Username");
               sub$.next(true);
               sub$.complete();
             });
@@ -70,11 +75,21 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   handleReceiveMessage(message: IMessage) {
-    let chatWith = this.account.username === message.from ? message.to : message.from;
+    this.addToCurrentChat(message);
+    this.error = '';
+  }
+
+  handleReceiveFile(file: IFile) {
+    this.addToCurrentChat(file);
+    this.error ='';
+  }
+
+  addToCurrentChat(addressable: IAddressable) {
+    let chatWith = this.account.username === addressable.from ? addressable.to : addressable.from;
     let isExistingChat = false;
     this.allChats.forEach(chat => {
       if (chat.chatWith === chatWith) {
-        chat.messages.push(message);
+        chat.addressableList.push(addressable);
         isExistingChat = true;
       }
     });
@@ -82,14 +97,9 @@ export class ChatComponent implements OnInit, OnDestroy {
     if (!isExistingChat) {
       this.allChats.push({
         chatWith,
-        messages: [message],
+        addressableList: [addressable],
       })
     }
-
-    this.error = '';
-  }
-
-  handleReceiveFile(file: IFile) {
 
   }
 
@@ -111,14 +121,6 @@ export class ChatComponent implements OnInit, OnDestroy {
       chatField.scrollTop = chatField.scrollHeight - chatField.clientHeight;
   }
 
-  wasSent(message: IMessage): string {
-    if (message.to === this.account.username) {
-      return '1';
-    } else {
-      return '0';
-    }
-  }
-
   addChat() {
     const until$ = new ReplaySubject<boolean>();
     this.isModalOpen = true;
@@ -130,7 +132,7 @@ export class ChatComponent implements OnInit, OnDestroy {
             if (!this.isExistingChat(result)) {
               const chat: IChat = {
                 chatWith: result,
-                messages: [],
+                addressableList: [],
               };
               this.allChats.push(chat);
             }
@@ -164,10 +166,6 @@ export class ChatComponent implements OnInit, OnDestroy {
     return !!this.allChats.find(chat => chat.chatWith === username);
   }
 
-  containsYoutube(url: string): boolean {
-    return new RegExp('http(?:s?):\\/\\/(?:www\\.)?youtu(?:be\\.com\\/watch\\?v=|\\.be\\/)([\\w\\-\\_]*)(&(amp;)?‌​[\\w\\?‌​=]*)?').test(url);
-  }
-
   ngOnDestroy() {
     this.destroyed$.next();
     this.destroyed$.complete();
@@ -187,18 +185,6 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.isValidWidth = window.innerWidth >= 770;
   }
 
-  downloadFile() {
-    this.service.downloadFile({
-      load: doc => {
-        console.log(doc.file.length)
-        var blob = new Blob([doc.file], {type: "application/pdf"});
-        var objectUrl = URL.createObjectURL(blob);
-        console.log('set img');
-        window.open(objectUrl);
-      }
-    });
-  }
-
   openUploadFile() {
     const until$ = new ReplaySubject<boolean>();
     this.isModalOpen = true;
@@ -215,5 +201,9 @@ export class ChatComponent implements OnInit, OnDestroy {
         () => {
           this.isModalOpen = false;
         });
+  }
+
+  isAMessage(addressable: IAddressable) {
+    return 'text' in addressable;
   }
 }

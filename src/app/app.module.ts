@@ -25,6 +25,8 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { ChatDropdownComponent } from './chat/chat-dropdown/chat-dropdown.component';
 import { VideoComponent } from './chat/video/video.component';
 import { UploadFileModalComponent } from './chat/upload-file-modal/upload-file-modal.component';
+import { MessageComponent } from './chat/message/message.component';
+import { FileComponent } from './chat/file/file.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -45,6 +47,8 @@ const appRoutes: Routes = [
     ChatDropdownComponent,
     VideoComponent,
     UploadFileModalComponent,
+    MessageComponent,
+    FileComponent,
   ],
   imports: [
     BrowserModule,

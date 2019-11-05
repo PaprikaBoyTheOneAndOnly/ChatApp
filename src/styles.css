@@ -16,6 +16,9 @@ body{
   --col-green: #38A75E;
   --col-light-green: #3DB867;
   --col-lightest-green: #41C970;
+
+  --col-lightest-grey: #F2F2F2;
+  --col-light-grey: #E6E6E6;
 }
 
 html {

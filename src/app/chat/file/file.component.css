@@ -1,0 +1,28 @@
+.box {
+  display: inline-block;
+  padding: 5px 30px 5px 20px;
+  color: black;
+  background-color: var(--col-light-grey);
+  border: solid 5px var(--col-lightest-grey);
+  border-radius: 10px ;
+  margin: 4px 10px;
+}
+
+.box:hover{
+  cursor: pointer;
+  background-color: var(--col-lightest-grey);
+  border: solid 5px var(--col-light-grey);
+}
+
+.file-icon {
+  height: 20px;
+  margin-right: 10px;
+}
+.file-0 .box {
+  margin-right: -15px;
+}
+
+.file-0 {
+  text-align: right;
+  margin-right: 20px;
+}

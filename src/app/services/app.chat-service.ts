@@ -52,7 +52,7 @@ export class ChatService {
 
       this.stompClient.subscribe('/user/chat/receiveFile', (response) => {
         const body = JSON.parse(response.body);
-        console.log(body);
+        fileObserver.next(body);
       });
     });
   }
@@ -78,9 +78,9 @@ export class ChatService {
     })
   }
 
-  downloadFile(lol) {
-    console.log('download');
-    this.httpClient.get(`${this.baseUrl}/downloadFile`).subscribe(file => {
+  downloadFile(lol, filename) {
+    this.httpClient.get(`${this.baseUrl}/downloadFile?filename=${filename}`).subscribe(file => {
+      console.log(file)
       lol.load(file);
     })
   }
