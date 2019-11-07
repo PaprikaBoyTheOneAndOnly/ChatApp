@@ -5,10 +5,11 @@ import {CompatClient, Stomp} from '@stomp/stompjs';
 import {select, Store} from '@ngrx/store';
 import {getServerPort} from '../store/app.configurations';
 import {getAccount} from '../store/login.reducer';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import * as SockJS from "sockjs-client";
 import * as io from 'socket.io-client';
 import {environment} from "../../environments/environment";
+import * as fileSaver from 'file-saver';
 
 @Injectable({
   providedIn: 'root'
@@ -79,9 +80,10 @@ export class ChatService {
   }
 
   downloadFile(lol, filename) {
+    let headers = new HttpHeaders();
     this.httpClient.get(`${this.baseUrl}/downloadFile?filename=${filename}`).subscribe(file => {
-      console.log(file)
-      lol.load(file);
+      console.log(file);
+      //lol.load(file);
     })
   }
 
