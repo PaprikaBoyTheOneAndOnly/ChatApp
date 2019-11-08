@@ -79,11 +79,18 @@ export class ChatService {
     })
   }
 
-  downloadFile(lol, filename) {
+  downloadFile(lol, filename, originalFilename, mediaType) {
     let headers = new HttpHeaders();
-    this.httpClient.get(`${this.baseUrl}/downloadFile?filename=${filename}`).subscribe(file => {
-      console.log(file);
-      //lol.load(file);
+    headers = headers.append('Accept', `${mediaType}; charset=utf-8`);
+    this.httpClient.get(`${this.baseUrl}/downloadFile?filename=${filename}&originalFilename=${originalFilename}`, {
+      headers: headers,
+      observe: 'response',
+      responseType: 'blob',
+    }).subscribe(response => {
+      const filename = response.headers.get('filename');
+
+       const blob = new Blob([response.body], {type: 'text/csv; charset=utf-8'});
+       fileSaver.saveAs(blob, filename);
     })
   }
 

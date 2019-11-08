@@ -1,4 +1,4 @@
-import {Component, Input } from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {IAccount, Icon, IFile} from "../../data-model";
 import {DomSanitizer} from "@angular/platform-browser";
 import {ChatService} from "../../services/app.chat-service";
@@ -14,7 +14,8 @@ export class FileComponent {
   private icon = Icon;
 
   constructor(private sanitizer: DomSanitizer,
-              private service: ChatService) { }
+              private service: ChatService) {
+  }
 
   wasSent(): string {
     if (this.file.to === this.account.username) {
@@ -26,12 +27,15 @@ export class FileComponent {
 
   downloadFile() {
     this.service.downloadFile({
-      load: doc => {
-        var blob = new Blob([doc.file], {type: "application/pdf"});
-        var objectUrl = URL.createObjectURL(blob);
-        window.open(objectUrl);
-      }
-    }, this.file.filename);
+        load: doc => {
+          var blob = new Blob([doc.file], {type: "application/pdf"});
+          var objectUrl = URL.createObjectURL(blob);
+          window.open(objectUrl);
+        }
+      },
+      this.file.filename,
+      this.file.originalFilename,
+      this.file.mediaType);
   }
 
 }

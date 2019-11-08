@@ -55,11 +55,7 @@ export class ChatComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(sub$))
             .subscribe(chats => {
               this.allChats = chats;
-              const file: IFile = {from:"Admin", to: "Username", filename: "asdfasf.pdf", originalFilename: "lol-Admin-Username.pdf"};
-              const file2: IFile = {from:"Username", to: "Admin", filename: "lol2.pdf", originalFilename: "lol2-Username-Admin.pdf"};
 
-              this.allChats[0].addressableList.push(file);
-              this.allChats[0].addressableList.push(file2);
               this.setCurrentChat("Username");
               sub$.next(true);
               sub$.complete();

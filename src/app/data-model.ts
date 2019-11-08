@@ -18,6 +18,7 @@ export interface IAddressable {
 export interface IFile extends IAddressable {
   filename: string;
   originalFilename: string;
+  mediaType: string;
 }
 export interface IMessage extends IAddressable {
   text: string;
