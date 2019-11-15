@@ -1,12 +1,8 @@
 .container {
   box-shadow: rgba(0, 0, 0, 0.3) 10px 10px;
   background-color: var(--col-beige);
-  height: 85vh;
+  height: 90vh;
   margin-top: 7vh;
-}
-
-main {
-  height: 100%;
 }
 
 /*head*/
@@ -112,3 +108,10 @@ li {
 }
 
 /*--chat--*/
+
+footer {
+  text-align: center;
+}
+footer a {
+  color: black;
+}

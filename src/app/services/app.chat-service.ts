@@ -5,11 +5,10 @@ import {CompatClient, Stomp} from '@stomp/stompjs';
 import {select, Store} from '@ngrx/store';
 import {getServerPort} from '../store/app.configurations';
 import {getAccount} from '../store/login.reducer';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import * as SockJS from "sockjs-client";
 import * as io from 'socket.io-client';
 import {environment} from "../../environments/environment";
-import * as fileSaver from 'file-saver';
 
 @Injectable({
   providedIn: 'root'
@@ -79,33 +78,35 @@ export class ChatService {
     })
   }
 
-  downloadFile(lol, filename, originalFilename, mediaType) {
+  downloadFile(filename, originalFilename, mediaType) {
     let headers = new HttpHeaders();
     headers = headers.append('Accept', `${mediaType}; charset=utf-8`);
-    this.httpClient.get(`${this.baseUrl}/downloadFile?filename=${filename}&originalFilename=${originalFilename}`, {
+    return this.httpClient.get(`${this.baseUrl}/downloadFile?filename=${filename}&originalFilename=${originalFilename}`, {
       headers: headers,
       observe: 'response',
       responseType: 'blob',
-    }).subscribe(response => {
-      const filename = response.headers.get('filename');
-
-       const blob = new Blob([response.body], {type: 'text/csv; charset=utf-8'});
-       fileSaver.saveAs(blob, filename);
-    })
+    });
   }
+
 
   disconnect() {
     if (this.stompClient) {
       this.stompClient.disconnect();
     }
   }
+
+  deleteFile(filename: string) {
+    this.httpClient.delete(`${this.baseUrl}/deleteFile?filename=${filename}`).subscribe();
+  }
 }
 
 class CoverClient {
   constructor(private socketIoClient, private username) {
   }
+
   debug;
   disconnect;
+
   send(destination: string, headers: any, body: any) {
     this.socketIoClient.emit(destination, body);
   }

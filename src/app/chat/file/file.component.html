@@ -1,6 +1,14 @@
 <div [ngClass]="'file-'+ wasSent()">
-  <div class="box" (click)="downloadFile()">
-    <img class="file-icon" [src]="sanitizer.bypassSecurityTrustResourceUrl(icon.FILE)" />
-    {{file.originalFilename}}
+  <div class="box">
+    <div class="file-content">
+      <img class="file-icon" [src]="sanitizer.bypassSecurityTrustResourceUrl(icon.FILE)" (click)="downloadFile()"/>
+      <div (click)="downloadFile()">{{file.originalFilename}}</div>
+      <img class="trash-icon"
+           [src]="sanitizer.bypassSecurityTrustResourceUrl(icon.TRASH)"
+      (click)="delete()"/>
+    </div>
+    <div *ngIf="error" class="error">
+      {{error}}
+    </div>
   </div>
 </div>

@@ -1,13 +1,26 @@
 .box {
-  display: inline-block;
-  padding: 5px 30px 5px 20px;
+  display: inline-flex;
+  align-items: flex-start;
+  flex-direction: column;
+
+  padding: 5px 5px 5px 20px;
   color: black;
   background-color: var(--col-light-grey);
   border: solid 5px var(--col-lightest-grey);
   border-radius: 10px ;
   margin: 4px 10px;
+  max-width: 20vw;
 }
 
+.file-content {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row
+}
+
+.file-content div {
+  padding-right: 20px;
+}
 .box:hover{
   cursor: pointer;
   background-color: var(--col-lightest-grey);
@@ -18,11 +31,29 @@
   height: 20px;
   margin-right: 10px;
 }
+
+.trash-icon {
+  display: none;
+}
+
+.box:hover .trash-icon {
+  display: inline-block;
+  height: 16px;
+}
+
 .file-0 .box {
   margin-right: -15px;
 }
 
 .file-0 {
-  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
   margin-right: 20px;
+}
+
+.error {
+  color: darkred;
+  font-size: x-small;
 }
